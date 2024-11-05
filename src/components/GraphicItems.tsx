@@ -15,7 +15,8 @@ export const GraphicItems = ({ color }: GraphicItemsProps) => {
       <div className="flex items-center gap-2">
         <Checkbox
           id="email"
-          className={`rounded-[4px] data-[state=checked]:bg-${color} data-[state=checked]:border-red-500`}
+          style={{"--color": color}}
+          className="rounded-[4px] data-[state=checked]:bg-[var(--color)] data-[state=checked]:border-red-500"
         />
         <Label htmlFor="email">Your email address</Label>
       </div>
