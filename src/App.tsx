@@ -1,29 +1,42 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import chroma from "chroma-js";
 import { Palette } from "./components/Palette";
 import { GraphicItems } from "./components/GraphicItems";
+import { useLocation } from "wouter";
+import { Button } from "./components/ui/button";
 
 function App() {
   const [color, setColor] = useState("#34d0ef");
+  const [, setLocation] = useLocation();
 
   const lightScale = chroma.scale(["#FEFDFC", color]).colors(6).slice(0, 5);
   const darkScale = chroma.scale([color, "#191919"]).colors(5).slice(1, 5);
 
-  console.log(lightScale);
-  console.log(darkScale);
+  useEffect(() => {
+    const queryString = new URLSearchParams(window.location.search).get(
+      "color"
+    );
+    console.log(queryString);
+    setColor(queryString ?? "#34d0ef");
+  }, []);
 
   return (
-    <section className="flex flex-col gap-[72px] items-center justify-center w-full h-screen">
-      <div className="flex items-center">
+    <section
+      style={{ "--color": color + "64" }}
+      className="bg-gradient-to-b from-[var(--color)] to-white to-40% flex flex-col gap-[72px] items-center justify-center w-full h-screen"
+    >
+      <h1 className="text-6xl font-bold">Generate your palette</h1>
+      <div className="flex items-center gap-2">
         <label htmlFor="current-colors" className="relative">
           <input
             type="color"
             value={color}
             onChange={(event) => {
+              setLocation("?color=%23" + event.target.value.slice(1, 8));
               setColor(event.target.value);
             }}
-            className="absolute left-2 top-2"
+            className="absolute left-2 top-[6px]"
           ></input>
           <input
             id="current-color"
@@ -32,9 +45,10 @@ function App() {
               setColor(event.target.value);
             }}
             placeholder="#FDA12D"
-            className="py-2 pl-16 pr-16 border-2 border-black rounded-[4px]"
+            className="py-[6px] pl-16 pr-16 border-[1px] border-slate-700 rounded-[4px]"
           />
         </label>
+        <Button className="rounded-[4px]">Save</Button>
       </div>
       <Palette lightScale={lightScale} color={color} darkScale={darkScale} />
       <GraphicItems color={color} />
