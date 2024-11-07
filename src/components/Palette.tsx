@@ -8,58 +8,29 @@ import { clipboard } from "@/utils/clipboard";
 import { useState } from "react";
 
 type PaletteProps = {
-  lightScale: string[];
-  color: string;
-  darkScale: string[];
+  colors: {
+    color: string;
+    text: string;
+  }[];
 };
 
-export const Palette = ({ lightScale, color, darkScale }: PaletteProps) => {
+export const Palette = ({ colors }: PaletteProps) => {
   const [lastColorCopied, setLastColorCopied] = useState("");
 
   return (
     <TooltipProvider>
       <article className="flex shadow-sm">
-        {lightScale.map((color) => {
+        {colors.map(({color, text}, index) => {
           return (
-            <Tooltip delayDuration={200} key={color}>
+            <Tooltip delayDuration={200} key={color + index}>
               <TooltipTrigger
                 onClick={() => {
                   clipboard(color);
                   setLastColorCopied(color);
                 }}
-                style={{ backgroundColor: color }}
+                style={{ backgroundColor: color, color: text }}
                 className="w-[100px] h-[100px] hover:border-2 hover:border-black"
-              ></TooltipTrigger>
-              <TooltipContent>
-                <p>{lastColorCopied === color ? "Copied!" : "Copy"}</p>
-              </TooltipContent>
-            </Tooltip>
-          );
-        })}
-        <Tooltip delayDuration={200}>
-          <TooltipTrigger
-            onClick={() => {
-              clipboard(color);
-              setLastColorCopied(color);
-            }}
-            style={{ backgroundColor: color }}
-            className="w-[100px] h-[100px] hover:border-2 hover:border-black"
-          ></TooltipTrigger>
-          <TooltipContent>
-            <p>{lastColorCopied === color ? "Copied!" : "Copy"}</p>
-          </TooltipContent>
-        </Tooltip>
-        {darkScale.map((color) => {
-          return (
-            <Tooltip delayDuration={200} key={color}>
-              <TooltipTrigger
-                onClick={() => {
-                  clipboard(color);
-                  setLastColorCopied(color);
-                }}
-                style={{ backgroundColor: color }}
-                className="w-[100px] h-[100px] hover:border-2 hover:border-black"
-              ></TooltipTrigger>
+              >{color}</TooltipTrigger>
               <TooltipContent>
                 <p>{lastColorCopied === color ? "Copied!" : "Copy"}</p>
               </TooltipContent>

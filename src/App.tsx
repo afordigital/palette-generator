@@ -10,8 +10,12 @@ function App() {
   const [color, setColor] = useState("#34d0ef");
   const [, setLocation] = useLocation();
 
-  const lightScale = chroma.scale(["#FEFDFC", color]).colors(6).slice(0, 5);
-  const darkScale = chroma.scale([color, "#191919"]).colors(5).slice(1, 5);
+  const colors = chroma.scale(["#FFFFFF", color, "#000000"]).colors(11).slice(1, 10).map(color => {
+    return {
+      color,
+      text: chroma.contrast(color, "#191919") > 4.5 ? "#191919" : "#FEFDFC",
+    }
+  });
 
   useEffect(() => {
     const queryString = new URLSearchParams(window.location.search).get(
@@ -50,7 +54,7 @@ function App() {
         </label>
         <Button className="rounded-[4px]">Save</Button>
       </div>
-      <Palette lightScale={lightScale} color={color} darkScale={darkScale} />
+      <Palette colors={colors} />
       <GraphicItems color={color} />
     </section>
   );
