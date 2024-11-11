@@ -21,38 +21,40 @@ export const Palette = ({ colors }: PaletteProps) => {
   const [lastColorCopied, setLastColorCopied] = useState("");
 
   return (
-    <TooltipProvider>
-      <article className="flex items-center shadow-sm">
-        {colors.map(({ color, text }, index) => {
-          return (
-            <Tooltip delayDuration={200} key={color + index}>
-              <TooltipTrigger
-                onClick={() => {
-                  clipboard(color);
-                  setLastColorCopied(color);
-                  toast(`Color ${color} copied correctly! 🐭`);
-                }}
-                style={{ backgroundColor: color, color: text }}
-                className="w-[100px] h-[100px] hover:border-2 hover:border-black"
-              >
-                {color}
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{lastColorCopied === color ? "Copied!" : "Copy"}</p>
-              </TooltipContent>
-            </Tooltip>
-          );
-        })}
-        <Button
-          onClick={() => {
-            clipboard(lastColorCopied);
-            toast(`Palette copied correctly! 🐭`);
-          }}
-          className="ml-4 rounded-[4px]"
-        >
-          Copy Palette
-        </Button>
-      </article>
-    </TooltipProvider>
+    <article className="flex justify-center items-center w-full">
+      <TooltipProvider>
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(0,100px))] place-content-center w-full">
+          {colors.map(({ color, text }, index) => {
+            return (
+              <Tooltip delayDuration={200} key={color + index}>
+                <TooltipTrigger
+                  onClick={() => {
+                    clipboard(color);
+                    setLastColorCopied(color);
+                    toast(`Color ${color} copied correctly! 🐭`);
+                  }}
+                  style={{ backgroundColor: color, color: text }}
+                  className="w-[100px] h-[100px] hover:border-2 hover:border-black shadow"
+                >
+                  {color}
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{lastColorCopied === color ? "Copied!" : "Copy"}</p>
+                </TooltipContent>
+              </Tooltip>
+            );
+          })}
+          <Button
+            onClick={() => {
+              clipboard(lastColorCopied);
+              toast(`Palette copied correctly! 🐭`);
+            }}
+            className="ml-4 rounded-[4px]"
+          >
+            Copy Palette
+          </Button>
+        </div>
+      </TooltipProvider>
+    </article>
   );
 };

@@ -60,55 +60,57 @@ function App() {
   return (
     <section
       style={{ "--color": color + "64" }}
-      className="bg-gradient-to-b from-[var(--color)] to-white to-40% flex flex-col gap-[48px] items-center justify-center w-full h-screen"
+      className="bg-gradient-to-b from-[var(--color)] to-white to-40% h-screen"
     >
-      <h1 className="text-6xl font-bold">
-        Generate your{" "}
-        <span className="inline-block rotate-3 hover:rotate-2 bg-[var(--color)] p-1 border-black border-2 shadow-[4px_4px_0_0_rgba(0,0,0,1)] rounded-[4px]">
-          Palette
-        </span>
-      </h1>
-      <Toaster />
-      <div className="flex items-center gap-2">
-        <Button
-          onClick={() => {
-            const newColor = getRandomColor();
-            setColor(newColor);
-            setColorAux(newColor);
-            setLocation("?color=%23" + newColor.slice(1, 8));
-          }}
-          variant={"secondary"}
-          className="rounded-[4px]"
-        >
-          Generate Random
-        </Button>
-        <label htmlFor="current-colors" className="relative">
-          <input
-            type="color"
-            value={color}
-            onChange={(event) => {
-              setLocation("?color=%23" + event.target.value.slice(1, 8));
-              setColor(event.target.value);
-              setColorAux(event.target.value);
+      <div className="flex flex-col gap-[48px] items-center justify-center w-full h-full max-w-screen-xl mx-auto px-5">
+        <h1 className="text-3xl lg:text-6xl font-bold">
+          Generate your{" "}
+          <span className="inline-block rotate-3 hover:rotate-2 bg-[var(--color)] p-1 border-black border-2 shadow-[4px_4px_0_0_rgba(0,0,0,1)] rounded-[4px]">
+            Palette
+          </span>
+        </h1>
+        <Toaster />
+        <div className="flex flex-col md:flex-row items-center gap-2">
+          <Button
+            onClick={() => {
+              const newColor = getRandomColor();
+              setColor(newColor);
+              setColorAux(newColor);
+              setLocation("?color=%23" + newColor.slice(1, 8));
             }}
-            className="absolute left-2 top-[6px]"
-          ></input>
-          <input
-            id="current-color"
-            value={colorAux}
-            onChange={(event) => {
-              setColorAux(event.target.value);
-              isValid(event.target.value);
-            }}
-            placeholder="#FDA12D"
-            className="py-[6px] pl-16 pr-16 border-[1px] border-slate-700 rounded-[4px]"
-          />
-        </label>
-      </div>
+            variant={"secondary"}
+            className="rounded-[4px]"
+          >
+            Generate Random
+          </Button>
+          <label htmlFor="current-colors" className="relative">
+            <input
+              type="color"
+              value={color}
+              onChange={(event) => {
+                setLocation("?color=%23" + event.target.value.slice(1, 8));
+                setColor(event.target.value);
+                setColorAux(event.target.value);
+              }}
+              className="absolute left-2 top-[6px]"
+            ></input>
+            <input
+              id="current-color"
+              value={colorAux}
+              onChange={(event) => {
+                setColorAux(event.target.value);
+                isValid(event.target.value);
+              }}
+              placeholder="#FDA12D"
+              className="py-[6px] pl-16 pr-16 border-[1px] border-slate-700 rounded-[4px]"
+            />
+          </label>
+        </div>
 
-      <LastPalettes lastPalettes={lastPalettes} />
-      <Palette colors={colors} savePalette={savePalette} />
-      <GraphicItems color={color} />
+        <LastPalettes lastPalettes={lastPalettes} />
+        <Palette colors={colors} savePalette={savePalette} />
+        <GraphicItems color={color} />
+      </div>
     </section>
   );
 }
