@@ -1,11 +1,12 @@
 import { Label } from "./ui/label";
 import { Checkbox } from "./ui/checkbox";
+import { memo } from "react";
 
 export type GraphicItemsProps = {
   color: string;
 };
 
-export const GraphicItems = ({ color }: GraphicItemsProps) => {
+const GraphicItems = ({ color }: GraphicItemsProps) => {
   return (
     <div className="flex flex-col gap-[32px]">
       <div className="flex items-center gap-2">
@@ -28,3 +29,5 @@ export const GraphicItems = ({ color }: GraphicItemsProps) => {
     </div>
   );
 };
+
+export default memo(GraphicItems);

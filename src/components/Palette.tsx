@@ -5,7 +5,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { clipboard } from "@/utils/clipboard";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
 
@@ -17,7 +17,7 @@ type PaletteProps = {
   savePalette: (palette: string) => void;
 };
 
-export const Palette = ({ colors }: PaletteProps) => {
+const Palette = ({ colors }: PaletteProps) => {
   const [lastColorCopied, setLastColorCopied] = useState("");
 
   return (
@@ -58,3 +58,5 @@ export const Palette = ({ colors }: PaletteProps) => {
     </article>
   );
 };
+
+export default memo(Palette);

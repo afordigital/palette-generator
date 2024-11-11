@@ -1,8 +1,14 @@
-import { useEffect, useState } from "react";
+import {
+  useCallback,
+  useDeferredValue,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import "./App.css";
 import chroma from "chroma-js";
-import { Palette } from "./components/Palette";
-import { GraphicItems } from "./components/GraphicItems";
+import Palette from "./components/Palette";
+import GraphicItems from "./components/GraphicItems";
 import { useLocation } from "wouter";
 import { Button } from "./components/ui/button";
 import { getRandomColor } from "./utils/getRandomColor";
@@ -12,21 +18,25 @@ import { LastPalettes } from "./components/LastPalettes";
 function App() {
   const [color, setColor] = useState("#34d0ef");
   const [colorAux, setColorAux] = useState(color);
+  const deferredColor = useDeferredValue(color);
+  const deferredColorAux = useDeferredValue(colorAux);
 
   const [lastPalettes, setLastPalettes] = useState<string[]>([]);
 
   const [, setLocation] = useLocation();
 
-  const colors = chroma
-    .scale(["#FFFFFF", color, "#000000"])
-    .colors(11)
-    .slice(1, 10)
-    .map((color) => {
-      return {
-        color,
-        text: chroma.contrast(color, "#191919") > 4.5 ? "#191919" : "#FEFDFC",
-      };
-    });
+  const colors = useMemo(() => {
+    return chroma
+      .scale(["#FFFFFF", deferredColor, "#000000"])
+      .colors(11)
+      .slice(1, 10)
+      .map((color) => {
+        return {
+          color,
+          text: chroma.contrast(color, "#191919") > 4.5 ? "#191919" : "#FEFDFC",
+        };
+      });
+  }, [deferredColor]);
 
   const isValid = (newColor: string) => {
     const regex = /^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/;
@@ -39,9 +49,9 @@ function App() {
     return false;
   };
 
-  const savePalette = (newPalette: string) => {
+  const savePalette = useCallback((newPalette: string) => {
     setLastPalettes((lastPalettes) => [...lastPalettes, newPalette]);
-  };
+  }, []);
 
   useEffect(() => {
     const queryString = new URLSearchParams(window.location.search).get(
@@ -57,9 +67,22 @@ function App() {
     }
   }, []);
 
+  const handleColorChange = (event: any) => {
+    const newColor = event.target.value;
+    setColor(newColor);
+    setColorAux(newColor);
+    setLocation("?color=%23" + newColor.slice(1, 8));
+  };
+
+  const handleTextInputChange = (event: any) => {
+    const newColor = event.target.value;
+    setColorAux(newColor);
+    isValid(newColor);
+  };
+
   return (
     <section
-      style={{ "--color": color + "64" }}
+      style={{ "--color": deferredColor + "64" }}
       className="bg-gradient-to-b from-[var(--color)] to-white to-40% h-screen"
     >
       <div className="flex flex-col gap-[48px] items-center justify-center w-full h-full max-w-screen-xl mx-auto px-5">
@@ -87,20 +110,13 @@ function App() {
             <input
               type="color"
               value={color}
-              onChange={(event) => {
-                setLocation("?color=%23" + event.target.value.slice(1, 8));
-                setColor(event.target.value);
-                setColorAux(event.target.value);
-              }}
+              onChange={handleColorChange}
               className="absolute left-2 top-[6px]"
             ></input>
             <input
               id="current-color"
-              value={colorAux}
-              onChange={(event) => {
-                setColorAux(event.target.value);
-                isValid(event.target.value);
-              }}
+              value={deferredColorAux}
+              onChange={handleTextInputChange}
               placeholder="#FDA12D"
               className="py-[6px] pl-16 pr-16 border-[1px] border-slate-700 rounded-[4px]"
             />
@@ -109,7 +125,7 @@ function App() {
 
         <LastPalettes lastPalettes={lastPalettes} />
         <Palette colors={colors} savePalette={savePalette} />
-        <GraphicItems color={color} />
+        <GraphicItems color={deferredColor} />
       </div>
     </section>
   );
