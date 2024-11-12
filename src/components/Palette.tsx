@@ -7,14 +7,12 @@ import {
 import { clipboard } from "@/utils/clipboard";
 import { memo, useState } from "react";
 import { toast } from "sonner";
-import { Button } from "./ui/button";
 
 type PaletteProps = {
   colors: {
     color: string;
     text: string;
   }[];
-  savePalette: (palette: string) => void;
 };
 
 const Palette = ({ colors }: PaletteProps) => {

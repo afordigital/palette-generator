@@ -1,9 +1,10 @@
 import {
+  useEffect, 
+  useState,
   useCallback,
   useDeferredValue,
-  useEffect,
-  useMemo,
-  useState,
+  useMemo, 
+  useSyncExternalStore
 } from "react";
 import "./App.css";
 import chroma from "chroma-js";
@@ -14,6 +15,15 @@ import { Button } from "./components/ui/button";
 import { getRandomColor } from "./utils/getRandomColor";
 import { Toaster } from "@/components/ui/sonner";
 import { LastPalettes } from "./components/LastPalettes";
+import {useLocation} from "wouter";
+import {Button} from "@/components/ui/button";
+import {getRandomColor} from "@/utils/getRandomColor";
+import {Toaster} from "@/components/ui/sonner";
+import {SavedPalettes} from "@/components/SavedPalettes.tsx";
+import {SavePalette} from "@/components/SavePalette.tsx";
+import store, {type Palettes} from '@/utils/palettes';
+import {DeletePalette} from "@/components/DeletePalette.tsx";
+import {CopyPalette} from "@/components/CopyPalette.tsx";
 
 function App() {
   const [color, setColor] = useState("#34d0ef");
@@ -22,6 +32,7 @@ function App() {
   const deferredColorAux = useDeferredValue(colorAux);
 
   const [lastPalettes, setLastPalettes] = useState<string[]>([]);
+  const savedPalettes = useSyncExternalStore<Palettes>(store.subscribe, store.getSnapshot);
 
   const [, setLocation] = useLocation();
 
@@ -81,6 +92,7 @@ function App() {
   };
 
   return (
+    <>
     <section
       style={{ "--color": deferredColor + "64" }}
       className="bg-gradient-to-b from-[var(--color)] to-white to-40% h-screen"
@@ -123,11 +135,37 @@ function App() {
           </label>
         </div>
 
-        <LastPalettes lastPalettes={lastPalettes} />
+        <SavedPalettes savedPalettes={savedPalettes}/>
         <Palette colors={colors} savePalette={savePalette} />
+        <SavePalette colors={colors} action={store.add}></SavePalette>
         <GraphicItems color={deferredColor} />
       </div>
     </section>
+    <section className="flex gap-[48px] p-12 min-h-screen">
+    {savedPalettes && Object.keys(savedPalettes).length > 0 && (
+      <div className="flex flex-col gap-4">
+        <h2 className="text-4xl font-bold">Saved Palettes</h2>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2">
+          {Object.entries(savedPalettes).map(([name, palette]) => {
+            return <div key={name} className="flex flex-col gap-[24px]">
+              <div className="flex flex-row">
+                <h4 className="text-2xl font-bold">{name.replaceAll('-', ' ')}</h4>
+                <DeletePalette name={name} action={store.rem}></DeletePalette>
+                <CopyPalette colors={Object.entries(palette).map(([, color]) => ({
+                  color,
+                  text: chroma.contrast(color, "#191919") > 4.5 ? "#191919" : "#FEFDFC"
+                }))}></CopyPalette>
+              </div>
+              <Palette colors={Object.entries(palette).map(([, color]) => ({
+                color,
+                text: chroma.contrast(color, "#191919") > 4.5 ? "#191919" : "#FEFDFC"
+              }))}/>
+            </div>;
+          })}
+        </div>
+      </div>
+    )}
+    </>
   );
 }
 
