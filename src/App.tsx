@@ -1,22 +1,24 @@
-import {useEffect, useState, useSyncExternalStore} from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import "./App.css";
 import chroma from "chroma-js";
-import {Palette} from "@/components/Palette";
-import {GraphicItems} from "@/components/GraphicItems";
-import {useLocation} from "wouter";
-import {Button} from "@/components/ui/button";
-import {getRandomColor} from "@/utils/getRandomColor";
-import {Toaster} from "@/components/ui/sonner";
-import {SavedPalettes} from "@/components/SavedPalettes.tsx";
-import {SavePalette} from "@/components/SavePalette.tsx";
-import store, {type Palettes} from '@/utils/palettes';
-import {DeletePalette} from "@/components/DeletePalette.tsx";
-import {CopyPalette} from "@/components/CopyPalette.tsx";
+import { Palette } from "@/components/Palette";
+import { GraphicItems } from "@/components/GraphicItems";
+import { useLocation } from "wouter";
+import { Button } from "@/components/ui/button";
+import { getRandomColor } from "@/utils/getRandomColor";
+import { Toaster } from "@/components/ui/sonner";
+import { SavePalette } from "@/components/SavePalette.tsx";
+import store, { type Palettes } from "@/utils/palettes";
+import { DeletePalette } from "@/components/DeletePalette.tsx";
+import { CopyPalette } from "@/components/CopyPalette.tsx";
 
 function App() {
   const [color, setColor] = useState("#34d0ef");
   const [colorAux, setColorAux] = useState(color);
-  const savedPalettes = useSyncExternalStore<Palettes>(store.subscribe, store.getSnapshot);
+  const savedPalettes = useSyncExternalStore<Palettes>(
+    store.subscribe,
+    store.getSnapshot
+  );
 
   const [, setLocation] = useLocation();
 
@@ -59,17 +61,16 @@ function App() {
   return (
     <>
       <section
-        style={{"--color": color + "64"}}
+        style={{ "--color": color + "64" }}
         className="bg-gradient-to-b from-[var(--color)] to-white to-40% flex flex-col gap-[48px] items-center justify-center w-full min-h-screen max-h-full p-48"
       >
         <h1 className="text-6xl font-bold">
           Generate your{" "}
-          <span
-            className="inline-block rotate-3 hover:rotate-2 bg-[var(--color)] p-1 border-black border-2 shadow-[4px_4px_0_0_rgba(0,0,0,1)] rounded-[4px]">
-          Palette
-        </span>
+          <span className="inline-block rotate-3 hover:rotate-2 bg-[var(--color)] p-1 border-black border-2 shadow-[4px_4px_0_0_rgba(0,0,0,1)] rounded-[4px]">
+            Palette
+          </span>
         </h1>
-        <Toaster/>
+        <Toaster />
         <div className="flex items-center gap-2">
           <Button
             onClick={() => {
@@ -106,33 +107,52 @@ function App() {
             />
           </label>
         </div>
-        <SavedPalettes savedPalettes={savedPalettes}/>
-        <Palette colors={colors}/>
+        <Palette colors={colors} variant="Primary" />
         <SavePalette colors={colors} action={store.add}></SavePalette>
 
-        <GraphicItems color={color}/>
+        <GraphicItems color={color} />
       </section>
 
       <section className="flex gap-[48px] p-12 min-h-screen">
         {savedPalettes && Object.keys(savedPalettes).length > 0 && (
-          <div className="flex flex-col gap-4">
-            <h2 className="text-4xl font-bold">Saved Palettes</h2>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2">
+          <div className="flex flex-col w-full gap-4">
+            <h2 className="pb-6 text-4xl font-bold">Saved Palettes</h2>
+            <div className="grid gap-x-8 gap-y-8 grid-cols-[repeat(auto-fit,minmax(250px,1fr))] place-content-center w-full">
               {Object.entries(savedPalettes).map(([name, palette]) => {
-                return <div key={name} className="flex flex-col gap-[24px]">
-                  <div className="flex flex-row">
-                    <h4 className="text-2xl font-bold">{name.replaceAll('-', ' ')}</h4>
-                    <DeletePalette name={name} action={store.rem}></DeletePalette>
-                    <CopyPalette colors={Object.entries(palette).map(([, color]) => ({
-                      color,
-                      text: chroma.contrast(color, "#191919") > 4.5 ? "#191919" : "#FEFDFC"
-                    }))}></CopyPalette>
+                return (
+                  <div key={name} className="flex flex-col gap-[12px]">
+                    <div className="flex justify-between">
+                      <h4 className="font-semibold text-md">
+                        {name.replaceAll("-", " ")}
+                      </h4>
+                      <div className="flex">
+                        <CopyPalette
+                          colors={Object.entries(palette).map(([, color]) => ({
+                            color,
+                            text:
+                              chroma.contrast(color, "#191919") > 4.5
+                                ? "#191919"
+                                : "#FEFDFC",
+                          }))}
+                        ></CopyPalette>
+                        <DeletePalette
+                          name={name}
+                          action={store.rem}
+                        ></DeletePalette>
+                      </div>
+                    </div>
+                    <Palette
+                      variant="Secondary"
+                      colors={Object.entries(palette).map(([, color]) => ({
+                        color,
+                        text:
+                          chroma.contrast(color, "#191919") > 4.5
+                            ? "#191919"
+                            : "#FEFDFC",
+                      }))}
+                    />
                   </div>
-                  <Palette colors={Object.entries(palette).map(([, color]) => ({
-                    color,
-                    text: chroma.contrast(color, "#191919") > 4.5 ? "#191919" : "#FEFDFC"
-                  }))}/>
-                </div>;
+                );
               })}
             </div>
           </div>
