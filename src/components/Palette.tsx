@@ -13,19 +13,19 @@ type PaletteProps = {
     color: string;
     text: string;
   }[];
-  savePalette?: (newPalette: string) => void;
+  variant: "Primary" | "Secondary";
 };
 
-const Palette = ({ colors }: PaletteProps) => {
+export const Palette = ({ colors, variant }: PaletteProps) => {
   const [lastColorCopied, setLastColorCopied] = useState("");
 
   return (
-    <article className="flex justify-center items-center w-full">
-      <TooltipProvider>
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(0,100px))] place-content-center w-full">
-          {colors.map(({ color, text }, index) => {
-            return (
-              <Tooltip delayDuration={200} key={color + index}>
+    <TooltipProvider>
+      <article className="flex items-center">
+        {colors.map(({ color, text }, index) => {
+          return (
+            <Tooltip delayDuration={200} key={color + index}>
+              <div className="flex flex-col items-center gap-2 aspect-square">
                 <TooltipTrigger
                   onClick={() => {
                     clipboard(color);
@@ -33,19 +33,28 @@ const Palette = ({ colors }: PaletteProps) => {
                     toast(`Color ${color} copied correctly! 🐭`);
                   }}
                   style={{ backgroundColor: color, color: text }}
-                  className="w-[100px] h-[100px] hover:border-2 hover:border-black shadow"
-                >
-                  {color}
-                </TooltipTrigger>
-                <TooltipContent>
+                  className={` ${
+                    variant === "Primary"
+                      ? "w-[100px] h-[100px]"
+                      : "w-[30px] h-[30px]"
+                  } hover:border-2 hover:border-black`}
+                ></TooltipTrigger>
+                {variant === "Primary" && (
+                  <p className="text-sm text-slate-600">{color}</p>
+                )}
+              </div>
+              <TooltipContent>
+                {variant === "Primary" ? (
                   <p>{lastColorCopied === color ? "Copied!" : "Copy"}</p>
-                </TooltipContent>
-              </Tooltip>
-            );
-          })}
-        </div>
-      </TooltipProvider>
-    </article>
+                ) : (
+                  <p>{color}</p>
+                )}
+              </TooltipContent>
+            </Tooltip>
+          );
+        })}
+      </article>
+    </TooltipProvider>
   );
 };
 

@@ -1,12 +1,12 @@
 import {
-  useEffect,
+   useEffect,
   useState,
   useCallback,
   useDeferredValue,
   useMemo,
   useSyncExternalStore,
   ChangeEvent,
-} from "react";
+ } from "react";
 import "./App.css";
 import chroma from "chroma-js";
 import Palette from "./components/Palette";
@@ -28,8 +28,11 @@ function App() {
   const deferredColorAux = useDeferredValue(colorAux);
 
   const savedPalettes = useSyncExternalStore<Palettes>(
+    
     store.subscribe,
+   
     store.getSnapshot
+  
   );
 
   const [, setLocation] = useLocation();
@@ -152,31 +155,34 @@ function App() {
       </section>
       <section className="flex gap-[48px] p-12 min-h-screen">
         {savedPalettes && Object.keys(savedPalettes).length > 0 && (
-          <div className="flex flex-col gap-4">
-            <h2 className="text-4xl font-bold">Saved Palettes</h2>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="flex flex-col w-full gap-4">
+            <h2 className="pb-6 text-4xl font-bold">Saved Palettes</h2>
+            <div className="grid gap-x-8 gap-y-8 grid-cols-[repeat(auto-fit,minmax(250px,1fr))] place-content-center w-full">
               {Object.entries(savedPalettes).map(([name, palette]) => {
                 return (
-                  <div key={name} className="flex flex-col gap-[24px]">
-                    <div className="flex flex-row">
-                      <h4 className="text-2xl font-bold">
+                  <div key={name} className="flex flex-col gap-[12px]">
+                    <div className="flex justify-between">
+                      <h4 className="font-semibold text-md">
                         {name.replaceAll("-", " ")}
                       </h4>
-                      <DeletePalette
-                        name={name}
-                        action={store.rem}
-                      ></DeletePalette>
-                      <CopyPalette
-                        colors={Object.entries(palette).map(([, color]) => ({
-                          color,
-                          text:
-                            chroma.contrast(color, "#191919") > 4.5
-                              ? "#191919"
-                              : "#FEFDFC",
-                        }))}
-                      ></CopyPalette>
+                      <div className="flex">
+                        <CopyPalette
+                          colors={Object.entries(palette).map(([, color]) => ({
+                            color,
+                            text:
+                              chroma.contrast(color, "#191919") > 4.5
+                                ? "#191919"
+                                : "#FEFDFC",
+                          }))}
+                        ></CopyPalette>
+                        <DeletePalette
+                          name={name}
+                          action={store.rem}
+                        ></DeletePalette>
+                      </div>
                     </div>
                     <Palette
+                      variant="Secondary"
                       colors={Object.entries(palette).map(([, color]) => ({
                         color,
                         text:
@@ -186,6 +192,7 @@ function App() {
                       }))}
                     />
                   </div>
+                );
                 );
               })}
             </div>
