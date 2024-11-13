@@ -14,14 +14,39 @@ type PaletteProps = {
     text: string;
   }[];
   variant: "Primary" | "Secondary";
+  position?: "start" | "center" | "end";
 };
 
-export const Palette = ({ colors, variant }: PaletteProps) => {
+export const Palette = ({
+  colors,
+  variant,
+  position = "center",
+}: PaletteProps) => {
   const [lastColorCopied, setLastColorCopied] = useState("");
+
+  let contentPosition;
+  switch (position) {
+    case "start":
+      contentPosition = "place-content-start";
+      break;
+    case "end":
+      contentPosition = "place-content-end";
+      break;
+    case "center":
+    default:
+      contentPosition = "place-content-center";
+      break;
+  }
 
   return (
     <TooltipProvider>
-      <article className="flex items-center">
+      <article
+        className={`grid ${
+          variant === "Primary"
+            ? "grid-cols-[repeat(auto-fit,minmax(0px,100px))]"
+            : "grid-cols-[repeat(auto-fit,minmax(0px,30px))]"
+        } ${contentPosition} w-full`}
+      >
         {colors.map(({ color, text }, index) => {
           return (
             <Tooltip delayDuration={200} key={color + index}>

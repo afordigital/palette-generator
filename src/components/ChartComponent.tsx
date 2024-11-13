@@ -35,7 +35,10 @@ export const ChartComponent = ({ color }: ChartComponentProps) => {
   } satisfies ChartConfig;
 
   return (
-    <ChartContainer className="w-[500px] min-h-[500px]" config={chartConfig}>
+    <ChartContainer
+      className="max-w-[calc(100vw-2rem)] lg:max-w-[25vw] h-[500px]"
+      config={chartConfig}
+    >
       <BarChart accessibilityLayer data={chartData}>
         <CartesianGrid vertical={false} />
         <XAxis

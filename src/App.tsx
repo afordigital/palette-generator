@@ -1,12 +1,12 @@
 import {
-   useEffect,
+  useEffect,
   useState,
-  useCallback,
   useDeferredValue,
   useMemo,
   useSyncExternalStore,
   ChangeEvent,
- } from "react";
+  useCallback,
+} from "react";
 import "./App.css";
 import chroma from "chroma-js";
 import Palette from "./components/Palette";
@@ -15,24 +15,20 @@ import { useLocation } from "wouter";
 import { Button } from "./components/ui/button";
 import { getRandomColor } from "./utils/getRandomColor";
 import { Toaster } from "@/components/ui/sonner";
-import { SavedPalettes } from "@/components/SavedPalettes.tsx";
 import { SavePalette } from "@/components/SavePalette.tsx";
 import store, { type Palettes } from "@/utils/palettes";
 import { DeletePalette } from "@/components/DeletePalette.tsx";
 import { CopyPalette } from "@/components/CopyPalette.tsx";
+import Layout from "./layouts/Layout";
 
 function App() {
   const [color, setColor] = useState("#34d0ef");
   const [colorAux, setColorAux] = useState(color);
   const deferredColor = useDeferredValue(color);
-  const deferredColorAux = useDeferredValue(colorAux);
 
   const savedPalettes = useSyncExternalStore<Palettes>(
-    
     store.subscribe,
-   
     store.getSnapshot
-  
   );
 
   const [, setLocation] = useLocation();
@@ -48,68 +44,62 @@ function App() {
           text: chroma.contrast(color, "#191919") > 4.5 ? "#191919" : "#FEFDFC",
         };
       });
-  }, [deferredColor]);
+  }, [deferredColor, colorAux]);
 
-  const isValid = (newColor: string) => {
+  const isValid = useCallback((newColor: string) => {
     const regex = /^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/;
 
     if (regex.test(newColor)) {
       setColor(newColor);
+      setColorAux(newColor);
       setLocation("?color=%23" + newColor.slice(1, 8));
       return true;
     }
     return false;
-  };
+  }, []);
 
   useEffect(() => {
     const queryString = new URLSearchParams(window.location.search).get(
       "color"
     );
     if (!queryString) {
-      const newColor = getRandomColor();
-      setColor(newColor);
-      setColorAux(newColor);
+      handleGenerateRandom();
     } else {
-      handleParamChange();
+      const newColor = queryString;
+      isValid(newColor);
     }
   }, []);
-
-  const handleParamChange = useCallback(() => {
-    const queryString = new URLSearchParams(window.location.search).get(
-      "color"
-    );
-    if (queryString && queryString !== color) {
-      setColor(queryString);
-      setColorAux(queryString);
-    }
-  }, [deferredColor]);
 
   const handleColorChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       const newColor = event.target.value;
-      setColor(newColor);
-      setColorAux(newColor);
-      setLocation("?color=%23" + newColor.slice(1, 8));
-    },
-    [deferredColor]
-  );
-
-  const handleTextInputChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      const newColor = event.target.value;
-      setColorAux(newColor);
       isValid(newColor);
     },
-    [deferredColor]
+    []
   );
 
+  const handleTextInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const newColor = event.target.value;
+    if (newColor.length > 7) return;
+    setColorAux(newColor);
+    isValid(newColor);
+  };
+
+  const handleGenerateRandom = () => {
+    const newColor = getRandomColor();
+    isValid(newColor);
+  };
+
+  console.log(colors);
+
   return (
-    <>
-      <section
-        style={{ "--color": deferredColor + "64" }}
-        className="bg-gradient-to-b from-[var(--color)] to-white to-40% h-screen"
-      >
-        <div className="flex flex-col gap-[48px] items-center justify-center w-full h-full max-w-screen-xl mx-auto px-5">
+    <Layout>
+      <section>
+        <div
+          style={{ "--color": deferredColor + "64" }}
+          className="absolute inset-0 bg-gradient-to-b from-[var(--color)] to-white to-25% h-full -z-10"
+        />
+        <div className="flex flex-col items-center justify-center w-full h-full mx-auto gap-[48px] mb-40">
           <h1 className="text-3xl lg:text-6xl font-bold">
             Generate your{" "}
             <span className="inline-block rotate-3 hover:rotate-2 bg-[var(--color)] p-1 border-black border-2 shadow-[4px_4px_0_0_rgba(0,0,0,1)] rounded-[4px]">
@@ -119,12 +109,7 @@ function App() {
           <Toaster />
           <div className="flex flex-col md:flex-row items-center gap-2">
             <Button
-              onClick={() => {
-                const newColor = getRandomColor();
-                setColor(newColor);
-                setColorAux(newColor);
-                setLocation("?color=%23" + newColor.slice(1, 8));
-              }}
+              onClick={handleGenerateRandom}
               variant={"secondary"}
               className="rounded-[4px]"
             >
@@ -139,21 +124,20 @@ function App() {
               ></input>
               <input
                 id="current-color"
-                value={deferredColorAux}
+                value={colorAux}
                 onChange={handleTextInputChange}
                 placeholder="#FDA12D"
-                className="py-[6px] pl-16 pr-16 border-[1px] border-slate-700 rounded-[4px]"
+                className="py-[6px] pl-16 border-[1px] border-slate-700 rounded-[4px]"
               />
             </label>
           </div>
 
-          <SavedPalettes savedPalettes={savedPalettes} />
-          <Palette colors={colors} />
+          <Palette colors={colors} variant="Primary" />
           <SavePalette colors={colors} action={store.add}></SavePalette>
           <GraphicItems color={deferredColor} />
         </div>
       </section>
-      <section className="flex gap-[48px] p-12 min-h-screen">
+      <section className="flex gap-[48px] min-h-screen">
         {savedPalettes && Object.keys(savedPalettes).length > 0 && (
           <div className="flex flex-col w-full gap-4">
             <h2 className="pb-6 text-4xl font-bold">Saved Palettes</h2>
@@ -183,6 +167,7 @@ function App() {
                     </div>
                     <Palette
                       variant="Secondary"
+                      position="start"
                       colors={Object.entries(palette).map(([, color]) => ({
                         color,
                         text:
@@ -193,13 +178,12 @@ function App() {
                     />
                   </div>
                 );
-                );
               })}
             </div>
           </div>
         )}
       </section>
-    </>
+    </Layout>
   );
 }
 
