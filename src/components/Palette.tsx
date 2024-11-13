@@ -13,6 +13,7 @@ type PaletteProps = {
     color: string;
     text: string;
   }[];
+  savePalette?: (newPalette: string) => void;
 };
 
 const Palette = ({ colors }: PaletteProps) => {
@@ -42,15 +43,6 @@ const Palette = ({ colors }: PaletteProps) => {
               </Tooltip>
             );
           })}
-          <Button
-            onClick={() => {
-              clipboard(lastColorCopied);
-              toast(`Palette copied correctly! 🐭`);
-            }}
-            className="ml-4 rounded-[4px]"
-          >
-            Copy Palette
-          </Button>
         </div>
       </TooltipProvider>
     </article>
