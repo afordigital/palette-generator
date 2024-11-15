@@ -1,0 +1,14 @@
+{
+    "recommendations": [
+        "dsznajder.es7-react-js-snippets",
+        "burkeholland.simple-react-snippets",
+        "dbaeumer.vscode-eslint",
+        "usernamehw.errorlens",
+        "BracketPairColorDLW.bracket-pair-color-dlw",
+        "formulahendry.auto-rename-tag",
+        "formulahendry.auto-close-tag",
+        "eamodio.gitlens",
+        "steoates.autoimport",
+        "formulahendry.auto-complete-tag"
+    ]
+}

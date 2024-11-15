@@ -20,6 +20,7 @@ import store, { type Palettes } from "@/utils/palettes";
 import { DeletePalette } from "@/components/DeletePalette.tsx";
 import { CopyPalette } from "@/components/CopyPalette.tsx";
 import Layout from "./layouts/Layout";
+import { debounce } from "./utils/debounce";
 
 function App() {
   const [color, setColor] = useState("#34d0ef");
@@ -59,9 +60,8 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const queryString = new URLSearchParams(window.location.search).get(
-      "color"
-    );
+    const search = window.location.search;
+    const queryString = new URLSearchParams(search).get("color");
     if (!queryString) {
       handleGenerateRandom();
     } else {
@@ -73,7 +73,10 @@ function App() {
   const handleColorChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       const newColor = event.target.value;
-      isValid(newColor);
+
+      debounce({
+        callback: () => isValid(newColor)
+      }); 
     },
     []
   );
@@ -101,7 +104,7 @@ function App() {
         />
         <div className="flex flex-col items-center justify-center w-full h-full mx-auto gap-[48px] mb-40">
           <h1 className="text-3xl lg:text-6xl font-bold">
-            Generate your{" "}
+            Generate your{""}
             <span className="inline-block rotate-3 hover:rotate-2 bg-[var(--color)] p-1 border-black border-2 shadow-[4px_4px_0_0_rgba(0,0,0,1)] rounded-[4px]">
               Palette
             </span>
