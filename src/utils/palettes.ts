@@ -9,6 +9,7 @@ export interface Palettes {
 interface Store {
   add: (name: string, palette: Palette) => void,
   rem: (name: string) => void,
+  updatePaletteName: (oldName: string, newName: string) => string,
   subscribe: (listener: Listener) => Unsubscribe,
   getSnapshot: () => Palettes
 }
@@ -40,6 +41,33 @@ const store: Store = {
     }, {} as Palettes);
     emit();
     localStorage.setItem('palettes', JSON.stringify(palettes));
+  },
+  updatePaletteName(oldName, newName) {
+    newName = newName.trim();
+    // Verify errors
+    if (palettes[newName]) {
+      return `The name "${newName}" already exists! 🐭`;
+    }
+    if (newName === '') {
+      return 'The name cannot be empty! 🐭';
+    }
+    // Update the name of the palette
+    if (palettes[oldName]) {
+      const updatedPalettes = Object.keys(palettes).reduce((acc, key) => {
+        if (key === oldName) {
+          acc[newName] = palettes[key];
+        } else {
+          acc[key] = palettes[key];
+        }
+        return acc;
+      }, {} as Palettes);
+  
+      palettes = updatedPalettes;
+  
+      emit();
+      localStorage.setItem('palettes', JSON.stringify(palettes));
+    }
+    return '';
   },
   subscribe(listener) {
     listeners.push(listener);
