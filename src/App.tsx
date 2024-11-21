@@ -21,6 +21,7 @@ import { DeletePalette } from "@/components/DeletePalette.tsx";
 import { CopyPalette } from "@/components/CopyPalette.tsx";
 import Layout from "./layouts/Layout";
 import { debounce } from "./utils/debounce";
+import { toast } from "sonner";
 
 function App() {
   const [color, setColor] = useState("#34d0ef");
@@ -75,8 +76,8 @@ function App() {
       const newColor = event.target.value;
 
       debounce({
-        callback: () => isValid(newColor)
-      }); 
+        callback: () => isValid(newColor),
+      });
     },
     []
   );
@@ -91,6 +92,14 @@ function App() {
   const handleGenerateRandom = () => {
     const newColor = getRandomColor();
     isValid(newColor);
+  };
+
+  // Edit Palette Name
+  const [isEditNamePalette, setIsEditNamePalette] = useState("");
+  const [valueEditNamePalette, setValueEditNamePalette] = useState("");
+  const handledEditNamePalette = (name: string) => {
+    setIsEditNamePalette(name);
+    setValueEditNamePalette(name);
   };
 
   console.log(colors);
@@ -149,24 +158,71 @@ function App() {
                 return (
                   <div key={name} className="flex flex-col gap-[12px]">
                     <div className="flex justify-between">
-                      <h4 className="font-semibold text-md">
-                        {name.replaceAll("-", " ")}
-                      </h4>
-                      <div className="flex">
-                        <CopyPalette
-                          colors={Object.entries(palette).map(([, color]) => ({
-                            color,
-                            text:
-                              chroma.contrast(color, "#191919") > 4.5
-                                ? "#191919"
-                                : "#FEFDFC",
-                          }))}
-                        ></CopyPalette>
-                        <DeletePalette
-                          name={name}
-                          action={store.rem}
-                        ></DeletePalette>
-                      </div>
+                      {isEditNamePalette !== "" &&
+                      isEditNamePalette === name ? (
+                        <label
+                          className={`flex rounded-xl border-2 w-60 ${
+                            isEditNamePalette !== "" ? " border-black" : ""
+                          }`}
+                        >
+                          <input
+                            type="text"
+                            value={valueEditNamePalette}
+                            onChange={(event) => {
+                              setValueEditNamePalette(event.target.value);
+                            }}
+                            className="font-semibold text-md px-2 mb-1 bg-transparent outline-none"
+                            placeholder={"..."}
+                            autoFocus
+                            onBlur={() => {
+                              setIsEditNamePalette("");
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                const isError = store.updatePaletteName(
+                                  name,
+                                  valueEditNamePalette
+                                );
+                                if (isError !== '') {
+                                  toast.error(isError);
+                                }
+                                setIsEditNamePalette("");
+                              } else if (e.key === "Escape") {
+                                setValueEditNamePalette("");
+                                setIsEditNamePalette("");
+                              }
+                            }}
+                          />
+                        </label>
+                      ) : (
+                        <h4
+                          className="font-semibold text-md w-full"
+                          onDoubleClick={() => {
+                            handledEditNamePalette(name);
+                          }}
+                        >
+                          {name.replaceAll("-", " ")}
+                        </h4>
+                      )}
+                      {!(isEditNamePalette !== "" && isEditNamePalette === name) &&(
+                        <div className="flex">
+                          <CopyPalette
+                            colors={Object.entries(palette).map(
+                              ([, color]) => ({
+                                color,
+                                text:
+                                  chroma.contrast(color, "#191919") > 4.5
+                                    ? "#191919"
+                                    : "#FEFDFC",
+                              })
+                            )}
+                          ></CopyPalette>
+                          <DeletePalette
+                            name={name}
+                            action={store.rem}
+                          ></DeletePalette>
+                        </div>
+                      )}
                     </div>
                     <Palette
                       variant="Secondary"
