@@ -6,6 +6,13 @@ export interface Palettes {
   [key: string]: Palette
 }
 
+interface Store {
+  add: (name: string, palette: Palette) => void,
+  rem: (name: string) => void,
+  subscribe: (listener: Listener) => Unsubscribe,
+  getSnapshot: () => Palettes
+}
+
 type Listener = () => void;
 type Unsubscribe = () => void;
 
@@ -18,14 +25,9 @@ function emit() {
   }
 }
 
-const store: {
-  add: (name: string, palette: Palette) => void,
-  rem: (name: string) => void,
-  subscribe: (listener: Listener) => Unsubscribe,
-  getSnapshot: () => Palettes
-} = {
+const store: Store = {
   add(name, palette) {
-    palettes = {...palettes, [name]: palette};
+    palettes = { ...palettes, [name]: palette };
     emit();
     localStorage.setItem('palettes', JSON.stringify(palettes));
   },
