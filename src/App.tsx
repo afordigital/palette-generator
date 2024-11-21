@@ -21,12 +21,20 @@ import { DeletePalette } from "@/components/DeletePalette.tsx";
 import { CopyPalette } from "@/components/CopyPalette.tsx";
 import Layout from "./layouts/Layout";
 import { debounce } from "./utils/debounce";
+import { Shuffle } from "lucide-react";
 import { toast } from "sonner";
 
 function App() {
-  const [color, setColor] = useState("#34d0ef");
+  const [color, setColor] = useState("#ffffff");
   const [colorAux, setColorAux] = useState(color);
   const deferredColor = useDeferredValue(color);
+
+  const [isEditNamePalette, setIsEditNamePalette] = useState("");
+  const [valueEditNamePalette, setValueEditNamePalette] = useState("");
+  const handledEditNamePalette = (name: string) => {
+    setIsEditNamePalette(name);
+    setValueEditNamePalette(name);
+  };
 
   const savedPalettes = useSyncExternalStore<Palettes>(
     store.subscribe,
@@ -94,38 +102,26 @@ function App() {
     isValid(newColor);
   };
 
-  // Edit Palette Name
-  const [isEditNamePalette, setIsEditNamePalette] = useState("");
-  const [valueEditNamePalette, setValueEditNamePalette] = useState("");
-  const handledEditNamePalette = (name: string) => {
-    setIsEditNamePalette(name);
-    setValueEditNamePalette(name);
-  };
-
-  console.log(colors);
-
   return (
     <Layout>
-      <section>
+      <section className="pt-24 font-sans">
         <div
           style={{ "--color": deferredColor + "64" }}
           className="absolute inset-0 bg-gradient-to-b from-[var(--color)] to-white to-25% h-full -z-10"
         />
-        <div className="flex flex-col items-center justify-center w-full h-full mx-auto gap-[48px] mb-40">
-          <h1 className="text-3xl lg:text-6xl font-bold">
-            Generate your{""}
-            <span className="inline-block rotate-3 hover:rotate-2 bg-[var(--color)] p-1 border-black border-2 shadow-[4px_4px_0_0_rgba(0,0,0,1)] rounded-[4px]">
-              Palette
-            </span>
+        <div className="flex flex-col items-center justify-center w-full h-full mx-auto gap-[36px] mb-40">
+          <h1 className="text-3xl font-bold font-headings lg:text-6xl">
+            Generate your Custom Palette
           </h1>
           <Toaster />
-          <div className="flex flex-col md:flex-row items-center gap-2">
+          <div className="flex flex-col items-center gap-2 md:flex-row">
             <Button
               onClick={handleGenerateRandom}
               variant={"secondary"}
               className="rounded-[4px]"
             >
               Generate Random
+              <Shuffle />
             </Button>
             <label htmlFor="current-colors" className="relative">
               <input
@@ -152,7 +148,9 @@ function App() {
       <section className="flex gap-[48px] min-h-screen">
         {savedPalettes && Object.keys(savedPalettes).length > 0 && (
           <div className="flex flex-col w-full gap-4">
-            <h2 className="pb-6 text-4xl font-bold">Saved Palettes</h2>
+            <h2 className="pb-6 text-4xl font-bold font-headings">
+              Saved Palettes
+            </h2>
             <div className="grid gap-x-8 gap-y-8 grid-cols-[repeat(auto-fit,minmax(250px,1fr))] place-content-center w-full">
               {Object.entries(savedPalettes).map(([name, palette]) => {
                 return (
@@ -161,7 +159,7 @@ function App() {
                       {isEditNamePalette !== "" &&
                       isEditNamePalette === name ? (
                         <label
-                          className={`flex rounded-xl border-2 w-60 ${
+                          className={`flex rounded-[4px] border-2 w-60 ${
                             isEditNamePalette !== "" ? " border-black" : ""
                           }`}
                         >
@@ -171,7 +169,7 @@ function App() {
                             onChange={(event) => {
                               setValueEditNamePalette(event.target.value);
                             }}
-                            className="font-semibold text-md px-2 mb-1 bg-transparent outline-none"
+                            className="px-2 mb-1 font-semibold bg-transparent outline-none text-md"
                             placeholder={"..."}
                             autoFocus
                             onBlur={() => {
@@ -183,7 +181,7 @@ function App() {
                                   name,
                                   valueEditNamePalette
                                 );
-                                if (isError !== '') {
+                                if (isError !== "") {
                                   toast.error(isError);
                                 }
                                 setIsEditNamePalette("");
@@ -196,7 +194,7 @@ function App() {
                         </label>
                       ) : (
                         <h4
-                          className="font-semibold text-md w-full"
+                          className="w-full font-semibold text-md"
                           onDoubleClick={() => {
                             handledEditNamePalette(name);
                           }}
@@ -204,7 +202,9 @@ function App() {
                           {name.replaceAll("-", " ")}
                         </h4>
                       )}
-                      {!(isEditNamePalette !== "" && isEditNamePalette === name) &&(
+                      {!(
+                        isEditNamePalette !== "" && isEditNamePalette === name
+                      ) && (
                         <div className="flex">
                           <CopyPalette
                             colors={Object.entries(palette).map(

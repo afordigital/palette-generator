@@ -61,7 +61,7 @@ export const Palette = ({
                   className={` ${
                     variant === "Primary"
                       ? "w-[100px] h-[100px]"
-                      : "w-[30px] h-[30px]"
+                      : "w-[32px] h-[32px]"
                   } hover:border-2 hover:border-black`}
                 ></TooltipTrigger>
                 {variant === "Primary" && (
