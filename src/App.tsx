@@ -115,14 +115,8 @@ function App() {
           </h1>
           <Toaster />
           <div className="flex flex-col items-center gap-2 md:flex-row">
-            <Button
-              onClick={handleGenerateRandom}
-              variant={"secondary"}
-              className="rounded-[4px]"
-            >
-              Generate Random
-              <Shuffle />
-            </Button>
+          <SavePalette colors={colors} action={store.add}></SavePalette>
+            
             <label htmlFor="current-colors" className="relative">
               <input
                 type="color"
@@ -141,7 +135,14 @@ function App() {
           </div>
 
           <Palette colors={colors} variant="Primary" />
-          <SavePalette colors={colors} action={store.add}></SavePalette>
+          <Button
+              onClick={handleGenerateRandom}
+              variant={"secondary"}
+              className="rounded-[4px]"
+            >
+              Generate Random
+              <Shuffle />
+            </Button>
           <GraphicItems color={deferredColor} />
         </div>
       </section>
