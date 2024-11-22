@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { toast } from "sonner";
 import { tailwindGenerator } from "@/lib/tailwindGenerator.ts";
 import type { Palette } from "@/utils/palettes.ts";
+import { Save } from "lucide-react";
 
 interface SavePaletteProps {
   colors: { color: string; text: string }[];
@@ -20,6 +21,7 @@ export function SavePalette({ colors, action }: SavePaletteProps) {
       className="ml-4 rounded-[4px]"
     >
       Save Palette
+      <Save />
     </Button>
   );
 }
