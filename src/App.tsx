@@ -114,11 +114,8 @@ function App() {
             Generate your Custom Palette
           </h1>
           <Toaster />
-          <Palette colors={colors} variant="Primary" />
-          <div className="flex flex-col items-center gap-2 md:flex-row">
-            
+          <div className="flex flex-col items-center gap-2 md:flex-row"> 
             <SavePalette colors={colors} action={store.add}></SavePalette>
-              
               <label htmlFor="current-colors" className="relative">
                 <input
                   type="color"
@@ -135,6 +132,7 @@ function App() {
                 />
               </label>
             </div>
+          <Palette colors={colors} variant="Primary" /> 
           <Button
               onClick={handleGenerateRandom}
               variant={"secondary"}
