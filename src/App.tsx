@@ -26,6 +26,7 @@ import { generateAIColor } from "@/utils/ai-color-generator";
 import { ApiKeyDialog } from "@/components/ApiKeyDialog";
 import openAIStore from "@/utils/openai-store";
 import { toast } from "sonner";
+import { PromptDialog } from "@/components/PromptDialog";
 
 function App() {
   const [color, setColor] = useState("#ffffff");
@@ -106,13 +107,16 @@ function App() {
   };
 
   const [showApiKeyDialog, setShowApiKeyDialog] = useState(false);
+  const [showPromptDialog, setShowPromptDialog] = useState(false);
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
 
   const handleGenerateAI = () => {
-    generateAIColor({
-      onSuccess: (color) => isValid(color),
-      onError: (error) => console.error("AI Generation Error:", error),
-      onKeyRequired: () => setShowApiKeyDialog(true)
-    });
+    const apiKey = openAIStore.getApiKey();
+    if (!apiKey) {
+      setShowApiKeyDialog(true);
+    } else {
+      setShowPromptDialog(true);
+    }
   };
 
   return (
@@ -175,10 +179,12 @@ function App() {
             <div className="grid gap-x-8 gap-y-8 grid-cols-[repeat(auto-fit,minmax(250px,1fr))] place-content-center w-full">
               {Object.entries(savedPalettes).map(([name, palette]) => {
                 return (
-                  <div key={name} className="flex flex-col gap-[12px]">
-                    <div className="flex justify-between">
-                      {isEditNamePalette !== "" &&
-                      isEditNamePalette === name ? (
+                  <div 
+                    key={name} 
+                    className="flex flex-col gap-[12px] rounded-lg border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-950"
+                  >
+                    <div className="flex justify-between items-center">
+                      {isEditNamePalette !== "" && isEditNamePalette === name ? (
                         <label
                           className={`flex rounded-[4px] border-2 w-60 ${
                             isEditNamePalette !== "" ? " border-black" : ""
@@ -215,7 +221,7 @@ function App() {
                         </label>
                       ) : (
                         <h4
-                          className="w-full font-semibold text-md"
+                          className="text-lg font-semibold tracking-tight"
                           onDoubleClick={() => {
                             handledEditNamePalette(name);
                           }}
@@ -223,25 +229,18 @@ function App() {
                           {name.replaceAll("-", " ")}
                         </h4>
                       )}
-                      {!(
-                        isEditNamePalette !== "" && isEditNamePalette === name
-                      ) && (
-                        <div className="flex">
+                      {!(isEditNamePalette !== "" && isEditNamePalette === name) && (
+                        <div className="flex gap-2">
                           <CopyPalette
-                            colors={Object.entries(palette).map(
-                              ([, color]) => ({
-                                color,
-                                text:
-                                  chroma.contrast(color, "#191919") > 4.5
-                                    ? "#191919"
-                                    : "#FEFDFC",
-                              })
-                            )}
-                          ></CopyPalette>
-                          <DeletePalette
-                            name={name}
-                            action={store.rem}
-                          ></DeletePalette>
+                            colors={Object.entries(palette).map(([, color]) => ({
+                              color,
+                              text:
+                                chroma.contrast(color, "#191919") > 4.5
+                                  ? "#191919"
+                                  : "#FEFDFC",
+                            }))}
+                          />
+                          <DeletePalette name={name} action={store.rem} />
                         </div>
                       )}
                     </div>
@@ -268,9 +267,36 @@ function App() {
         onSubmit={(apiKey) => {
           openAIStore.setApiKey(apiKey);
           setShowApiKeyDialog(false);
-          handleGenerateAI();
+          setShowPromptDialog(true);
         }}
         onCancel={() => setShowApiKeyDialog(false)}
+      />
+      <PromptDialog
+        open={showPromptDialog}
+        isLoading={isGeneratingAI}
+        onSubmit={(prompt) => {
+          setIsGeneratingAI(true);
+          generateAIColor({
+            onSuccess: (color) => {
+              isValid(color);
+              setIsGeneratingAI(false);
+              setShowPromptDialog(false);
+            },
+            onError: (error) => {
+              console.error("AI Generation Error:", error);
+              setIsGeneratingAI(false);
+            },
+            onKeyRequired: () => {
+              setShowApiKeyDialog(true);
+              setIsGeneratingAI(false);
+            },
+            prompt
+          });
+        }}
+        onCancel={() => {
+          setShowPromptDialog(false);
+          setIsGeneratingAI(false);
+        }}
       />
     </Layout>
   );

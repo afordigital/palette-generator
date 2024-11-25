@@ -5,12 +5,14 @@ interface AIColorGeneratorOptions {
   onSuccess: (color: string) => void;
   onError?: (error: Error) => void;
   onKeyRequired: () => void;
+  prompt?: string;
 }
 
 export async function generateAIColor({
   onSuccess,
   onError,
   onKeyRequired,
+  prompt,
 }: AIColorGeneratorOptions) {
   const apiKey = openAIStore.getApiKey();
 
@@ -37,6 +39,7 @@ export async function generateAIColor({
           {
             role: "user",
             content:
+              prompt ||
               "Generate a color that would work well for a modern software application, considering contrast ratios, accessibility, and current UI/UX trends.",
           },
         ],

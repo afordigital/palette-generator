@@ -41,33 +41,43 @@ export const Palette = ({
   return (
     <TooltipProvider>
       <article
-        className={`grid ${
+        className={`grid gap-1 ${
           variant === "Primary"
             ? "grid-cols-[repeat(auto-fit,minmax(0px,100px))]"
-            : "grid-cols-[repeat(auto-fit,minmax(0px,30px))]"
-        } ${contentPosition} w-full`}
+            : "grid-cols-[repeat(auto-fit,minmax(0px,40px))]"
+        } ${contentPosition} w-full rounded-lg bg-zinc-50/50 p-4 shadow-sm backdrop-blur-sm dark:bg-zinc-900/50`}
       >
         {colors.map(({ color, text }, index) => {
           return (
             <Tooltip delayDuration={200} key={color + index}>
-              <div className="flex flex-col items-center gap-2 aspect-square">
-                <TooltipTrigger
+              <TooltipTrigger asChild>
+                <button
                   onClick={() => {
                     clipboard(color);
                     setLastColorCopied(color);
                     toast(`Color ${color} copied correctly! 🐭`);
                   }}
-                  style={{ backgroundColor: color, color: text }}
-                  className={` ${
-                    variant === "Primary"
-                      ? "w-[100px] h-[100px]"
-                      : "w-[32px] h-[32px]"
-                  } hover:border-2 hover:border-black`}
-                ></TooltipTrigger>
-                {variant === "Primary" && (
-                  <p className="text-sm text-slate-600">{color}</p>
-                )}
-              </div>
+                  className="group relative flex flex-col items-center gap-2"
+                >
+                  <div
+                    style={{ backgroundColor: color, color: text }}
+                    className={`${
+                      variant === "Primary"
+                        ? "h-[100px] w-[100px]"
+                        : "h-[40px] w-[40px]"
+                    } rounded-md transition-all hover:scale-110 hover:shadow-lg ${
+                      variant === "Secondary"
+                        ? "hover:z-10"
+                        : ""
+                    }`}
+                  />
+                  {variant === "Primary" && (
+                    <span className="text-sm text-zinc-600 transition-colors group-hover:text-zinc-900 dark:text-zinc-400 dark:group-hover:text-zinc-100">
+                      {color}
+                    </span>
+                  )}
+                </button>
+              </TooltipTrigger>
               <TooltipContent>
                 {variant === "Primary" ? (
                   <p>{lastColorCopied === color ? "Copied!" : "Copy"}</p>

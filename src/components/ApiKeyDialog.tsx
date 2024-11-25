@@ -38,10 +38,7 @@ export function ApiKeyDialog({ open, onSubmit, onCancel }: ApiKeyDialogProps) {
           autoFocus
         />
         <AlertDialogFooter>
-          <AlertDialogCancel
-            onClick={onCancel}
-            className="rounded-[4px]"
-          >
+          <AlertDialogCancel onClick={onCancel} className="rounded-[4px]">
             Cancel
           </AlertDialogCancel>
           <Button
@@ -50,7 +47,7 @@ export function ApiKeyDialog({ open, onSubmit, onCancel }: ApiKeyDialogProps) {
               setApiKey("");
             }}
             className="rounded-[4px]"
-            disabled={!apiKey.startsWith('sk-')}
+            disabled={!apiKey.startsWith("sk-")}
           >
             Save Key
           </Button>
