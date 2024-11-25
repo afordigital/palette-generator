@@ -21,7 +21,10 @@ import { DeletePalette } from "@/components/DeletePalette.tsx";
 import { CopyPalette } from "@/components/CopyPalette.tsx";
 import Layout from "./layouts/Layout";
 import { debounce } from "./utils/debounce";
-import { Shuffle } from "lucide-react";
+import { Shuffle, Wand2 } from "lucide-react";
+import { generateAIColor } from "@/utils/ai-color-generator";
+import { ApiKeyDialog } from "@/components/ApiKeyDialog";
+import openAIStore from "@/utils/openai-store";
 import { toast } from "sonner";
 
 function App() {
@@ -102,6 +105,16 @@ function App() {
     isValid(newColor);
   };
 
+  const [showApiKeyDialog, setShowApiKeyDialog] = useState(false);
+
+  const handleGenerateAI = () => {
+    generateAIColor({
+      onSuccess: (color) => isValid(color),
+      onError: (error) => console.error("AI Generation Error:", error),
+      onKeyRequired: () => setShowApiKeyDialog(true)
+    });
+  };
+
   return (
     <Layout>
       <section className="pt-24 font-sans">
@@ -122,6 +135,14 @@ function App() {
             >
               Generate Random
               <Shuffle />
+            </Button>
+            <Button 
+              onClick={handleGenerateAI}
+              variant={"secondary"}
+              className="rounded-[4px]"
+            >
+              Generate with AI
+              <Wand2 />
             </Button>
             <label htmlFor="current-colors" className="relative">
               <input
@@ -242,6 +263,15 @@ function App() {
           </div>
         )}
       </section>
+      <ApiKeyDialog 
+        open={showApiKeyDialog}
+        onSubmit={(apiKey) => {
+          openAIStore.setApiKey(apiKey);
+          setShowApiKeyDialog(false);
+          handleGenerateAI();
+        }}
+        onCancel={() => setShowApiKeyDialog(false)}
+      />
     </Layout>
   );
 }
