@@ -114,8 +114,26 @@ function App() {
             Generate your Custom Palette
           </h1>
           <Toaster />
-          <div className="flex flex-col items-center gap-2 md:flex-row">
-            <Button
+          <div className="flex flex-col items-center gap-2 md:flex-row"> 
+            <SavePalette colors={colors} action={store.add}></SavePalette>
+              <label htmlFor="current-colors" className="relative">
+                <input
+                  type="color"
+                  value={deferredColor}
+                  onChange={handleColorChange}
+                  className="absolute left-2 top-[6px]"
+                ></input>
+                <input
+                  id="current-color"
+                  value={colorAux}
+                  onChange={handleTextInputChange}
+                  placeholder="#FDA12D"
+                  className="py-[6px] pl-16 border-[1px] border-slate-700 rounded-[4px]"
+                />
+              </label>
+            </div>
+          <Palette colors={colors} variant="Primary" /> 
+          <Button
               onClick={handleGenerateRandom}
               variant={"secondary"}
               className="rounded-[4px]"
@@ -123,25 +141,6 @@ function App() {
               Generate Random
               <Shuffle />
             </Button>
-            <label htmlFor="current-colors" className="relative">
-              <input
-                type="color"
-                value={deferredColor}
-                onChange={handleColorChange}
-                className="absolute left-2 top-[6px]"
-              ></input>
-              <input
-                id="current-color"
-                value={colorAux}
-                onChange={handleTextInputChange}
-                placeholder="#FDA12D"
-                className="py-[6px] pl-16 border-[1px] border-slate-700 rounded-[4px]"
-              />
-            </label>
-          </div>
-
-          <Palette colors={colors} variant="Primary" />
-          <SavePalette colors={colors} action={store.add}></SavePalette>
           <GraphicItems color={deferredColor} />
         </div>
       </section>
