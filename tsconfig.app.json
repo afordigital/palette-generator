@@ -14,6 +14,8 @@
       "@lib/*": ["./src/lib/*"],
       "@utils/*": ["./src/utils/*"],
       "@assets/*": ["./src/assets/*"],
+      "@public/*": ["./public/*"],
+      "@errors/*": ["./src/errors/*"],
     },
 
     /* Bundler mode */

@@ -18,7 +18,7 @@ interface DeletePaletteProps {
 }
 
 export function DeletePalette({ name, action }: DeletePaletteProps) {
-  const [showAlertDialog, setShowAlertDialog] = useState(false);
+  const [ showAlertDialog, setShowAlertDialog ] = useState(false);
 
   const deletePalette = () => {
     action(name);

@@ -13,6 +13,8 @@
       "@lib/*": ["./src/lib/*"],
       "@utils/*": ["./src/utils/*"],
       "@assets/*": ["./src/assets/*"],
+      "@errors/*": ["./src/errors/*"],
+      "@public/*": ["./public/*"],
     },
   },
   

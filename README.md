@@ -6,12 +6,12 @@ An intuitive application designed to create stunning color palettes, tailored fo
 
 ## Overview
 
-<img src="https://i.imgur.com/5QgPpRL.png" alt="table image of https://palette-generator-indol.vercel.app" width="500" />
-<img src="https://i.imgur.com/d1QLQ3C.png" alt="android image of https://palette-generator-indol.vercel.app" width="500" />
-<img src="https://i.imgur.com/omXHxoO.png" alt="desktop image of https://palette-generator-indol.vercel.app" width="500" />
-<img src="https://i.imgur.com/gqxpYwT.png" alt="iphone image of https://palette-generator-indol.vercel.app" width="500" />
+<img src="https://i.imgur.com/5QgPpRL.png" alt="table image of https://palette-generator-indol.vercel.app" width="200" />
+<img src="https://i.imgur.com/d1QLQ3C.png" alt="android image of https://palette-generator-indol.vercel.app" width="200" />
+<img src="https://i.imgur.com/omXHxoO.png" alt="desktop image of https://palette-generator-indol.vercel.app" width="200" />
+<img src="https://i.imgur.com/gqxpYwT.png" alt="iphone image of https://palette-generator-indol.vercel.app" width="200" />
 
-## Usage
+## Usage2
 
 ## How run the project
 
@@ -39,7 +39,7 @@ You must observe something like this
 
 Now, you can access the application in your browser at the indicated an address (Local, Network).
 
-## Suggests
+## suggestions
 
 If you are using visual studio code then you could install the following extensions:
 

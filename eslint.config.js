@@ -3,6 +3,8 @@ import globals from 'globals';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
+import typescriptEslint from "@typescript-eslint/eslint-plugin";
+
 
 export default tseslint.config(
   { ignores: ['dist'] },
@@ -14,6 +16,7 @@ export default tseslint.config(
       globals: globals.browser,
     },
     plugins: {
+      "@typescript-eslint": typescriptEslint,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
     },
@@ -22,8 +25,10 @@ export default tseslint.config(
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
+        
       ],
-      semi: ["error","always"]
+      semi: ["error","always"],
+      'array-bracket-spacing': ["error", "always"]
     },
   },
 );

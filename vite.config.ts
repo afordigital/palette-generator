@@ -19,6 +19,8 @@ export default defineConfig({
       "@layouts": path.resolve(__dirname, "./src/layout/").toString(),
       "@lib": path.resolve(__dirname, "./src/lib/").toString(),
       "@utils": path.resolve(__dirname, "./src/utils/").toString(),
+      "@errors": path.resolve(__dirname, "./src/errors/").toString(),
+      "@public": path.resolve(__dirname, "./public/").toString()
     },
   },
 });

@@ -14,7 +14,7 @@ export function CopyPalette({ colors }: CopyPaletteProps) {
       size={"sm"}
       variant={"outline"}
       onClick={() => {
-        tailwindGenerator(colors).then(([, palette]) => {
+        tailwindGenerator(colors).then(([ , palette ]) => {
           clipboard(JSON.stringify(palette));
           toast(`Palette copied correctly! 🐭`);
         });

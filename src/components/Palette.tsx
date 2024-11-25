@@ -7,12 +7,13 @@ import {
 import { clipboard } from "@utils/clipboard";
 import { memo, useState } from "react";
 import { toast } from "sonner";
-
-type PaletteProps = {
-  colors: {
+type ColorProperty ={
     color: string;
     text: string;
-  }[];
+}
+
+type PaletteProps = {
+  colors: ColorProperty[];
   variant: "Primary" | "Secondary";
   position?: "start" | "center" | "end";
 };
@@ -22,7 +23,7 @@ export const Palette = ({
   variant,
   position = "center",
 }: PaletteProps) => {
-  const [lastColorCopied, setLastColorCopied] = useState("");
+  const [ lastColorCopied, setLastColorCopied ] = useState("");
 
   let contentPosition;
   switch (position) {
@@ -41,11 +42,14 @@ export const Palette = ({
   return (
     <TooltipProvider>
       <article
-        className={`grid ${
+        className={
+        `grid ${
           variant === "Primary"
             ? "grid-cols-[repeat(auto-fit,minmax(0px,100px))]"
             : "grid-cols-[repeat(auto-fit,minmax(0px,30px))]"
-        } ${contentPosition} w-full`}
+        } 
+        ${contentPosition} w-full`
+      }
       >
         {colors.map(({ color, text }, index) => {
           return (
@@ -58,7 +62,7 @@ export const Palette = ({
                     toast(`Color ${color} copied correctly! 🐭`);
                   }}
                   style={{ backgroundColor: color, color: text }}
-                  className={` ${
+                  className={`${
                     variant === "Primary"
                       ? "w-[100px] h-[100px]"
                       : "w-[32px] h-[32px]"
