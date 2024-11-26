@@ -1,28 +1,30 @@
+import "./App.css";
+
 import {
-  useEffect,
-  useState,
-  useDeferredValue,
-  useMemo,
-  useSyncExternalStore,
   ChangeEvent,
   useCallback,
+  useDeferredValue,
+  useEffect,
+  useMemo,
+  useState,
+  useSyncExternalStore,
 } from "react";
-import "./App.css";
-import chroma from "chroma-js";
-import Palette from "./components/Palette";
-import GraphicItems from "./components/GraphicItems";
-import { useLocation } from "wouter";
-import { Button } from "./components/ui/button";
-import { getRandomColor } from "./utils/getRandomColor";
-import { Toaster } from "@/components/ui/sonner";
-import { SavePalette } from "@/components/SavePalette.tsx";
-import store, { type Palettes } from "@/utils/palettes";
-import { DeletePalette } from "@/components/DeletePalette.tsx";
-import { CopyPalette } from "@/components/CopyPalette.tsx";
-import Layout from "./layouts/Layout";
-import { debounce } from "./utils/debounce";
+
+import { Button } from "@components/ui/button";
+import { CopyPalette } from "@components/CopyPalette.tsx";
+import { debounce } from "@utils/debounce";
+import { DeletePalette } from "@components/DeletePalette.tsx";
+import { getRandomColor } from "@utils/getRandomColor";
+import { SavePalette } from "@components/SavePalette.tsx";
 import { Shuffle } from "lucide-react";
 import { toast } from "sonner";
+import { Toaster } from "@components/ui/sonner";
+import { useLocation } from "wouter";
+import chroma from "chroma-js";
+import GraphicItems from "@components/GraphicItems";
+import Layout from "./layouts/Layout";
+import Palette from "@components/Palette";
+import store, { type Palettes } from "@utils/palettes";
 
 function App() {
   const [color, setColor] = useState("#ffffff");

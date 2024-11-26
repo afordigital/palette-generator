@@ -1,65 +1,55 @@
-# React + TypeScript + Vite
+![app icon](public/windows/Square150x150Logo.scale-200.png)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Palette Generator
 
-Currently, two official plugins are available:
+An intuitive application designed to create stunning color palettes, tailored for UX/UI designers to enhance their projects with ease and precision.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Overview
 
-## Expanding the ESLint configuration
+<img src="https://i.imgur.com/5QgPpRL.png" alt="table image of https://palette-generator-indol.vercel.app" width="500" />
+<img src="https://i.imgur.com/d1QLQ3C.png" alt="android image of https://palette-generator-indol.vercel.app" width="500" />
+<img src="https://i.imgur.com/omXHxoO.png" alt="desktop image of https://palette-generator-indol.vercel.app" width="500" />
+<img src="https://i.imgur.com/gqxpYwT.png" alt="iphone image of https://palette-generator-indol.vercel.app" width="500" />
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Usage
 
-- Configure the top-level `parserOptions` property like this:
+## How run the project
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
+You need to be in the project directory and run the following commands:
+
+```powershell
+  npm install
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+After run the project with the following command:
 
-```js
-// eslint.config.js
-import react from "eslint-plugin-react";
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: "18.3" } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs["jsx-runtime"].rules,
-  },
-});
+```powershell
+  npm run dev
 ```
 
-## utils
+You must observe something like this
 
-#### debounce
+```powershell
+  VITE v5.4.11  ready in 438 ms
 
-the function debounce receive a callback for executing, then if you want to execute
-
-```ts
-// src/utils/debounce.ts
-
-debounce({
-  callback: () => isValid(newColor), // <== pass some that you want execute after of 500 milliseconds
-  delay: 500,
-});
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://192.168.1.44:5173/
+  ➜  press h + enter to show help
 ```
+
+Now, you can access the application in your browser at the indicated an address (Local, Network).
+
+## Suggests
+
+If you are using visual studio code then you could install the following extensions:
+
+- dsznajder.es7-react-js-snippets
+- burkeholland.simple-react-snippets
+- dbaeumer.vscode-eslint
+- usernamehw.errorlens
+- BracketPairColorDLW.bracket-pair-color-dlw
+- formulahendry.auto-rename-tag
+- formulahendry.auto-close-tag
+- eamodio.gitlens
+- steoates.autoimport
+- formulahendry.auto-complete-tag

@@ -1,4 +1,4 @@
-import type { Palette } from "@/utils/palettes.ts";
+import type { Palette } from "@utils/palettes.ts";
 
 const useOpen = true;
 const COLOR_API_URL = useOpen

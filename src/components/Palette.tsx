@@ -3,8 +3,8 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { clipboard } from "@/utils/clipboard";
+} from "@components/ui/tooltip";
+import { clipboard } from "@utils/clipboard";
 import { memo, useState } from "react";
 import { toast } from "sonner";
 

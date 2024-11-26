@@ -1,7 +1,7 @@
-import { Button } from "@/components/ui/button.tsx";
+import { Button } from "@components/ui/button.tsx";
 import { toast } from "sonner";
-import { tailwindGenerator } from "@/lib/tailwindGenerator.ts";
-import type { Palette } from "@/utils/palettes.ts";
+import { tailwindGenerator } from "@lib/tailwindGenerator.ts";
+import type { Palette } from "@utils/palettes.ts";
 import { Save } from "lucide-react";
 
 interface SavePaletteProps {

@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button.tsx";
-import { tailwindGenerator } from "@/lib/tailwindGenerator.ts";
-import { clipboard } from "@/utils/clipboard.ts";
+import { Button } from "@components/ui/button.tsx";
+import { tailwindGenerator } from "@lib/tailwindGenerator.ts";
+import { clipboard } from "@utils/clipboard.ts";
 import { Copy } from "lucide-react";
 import { toast } from "sonner";
 

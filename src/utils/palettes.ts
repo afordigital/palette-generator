@@ -61,9 +61,9 @@ const store: Store = {
         }
         return acc;
       }, {} as Palettes);
-  
+
       palettes = updatedPalettes;
-  
+
       emit();
       localStorage.setItem('palettes', JSON.stringify(palettes));
     }
@@ -73,12 +73,12 @@ const store: Store = {
     listeners.push(listener);
 
     return () => {
-      listeners = listeners.filter(l => l !== listener)
-    }
+      listeners = listeners.filter(l => l !== listener);
+    };
   },
   getSnapshot() {
     return palettes;
   },
-}
+};
 
 export default store;
