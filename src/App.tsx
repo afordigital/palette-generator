@@ -34,6 +34,9 @@ import {
   TooltipTrigger,
 } from "@radix-ui/react-tooltip";
 import { Footer } from "./components/Footer";
+import ApiKeyDialog from "@components/ApiKeyDialog";
+import PromptDialog from "@components/PromptDialog";
+import geminiStore from "@utils/gemini-store";
 
 function App() {
   const [color, setColor] = useState("#ffffff");
@@ -53,6 +56,10 @@ function App() {
   );
 
   const [, setLocation] = useLocation();
+
+  const [showApiKeyDialog, setShowApiKeyDialog] = useState(false);
+  const [showPromptDialog, setShowPromptDialog] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const colors = useMemo(() => {
     return chroma
@@ -113,6 +120,21 @@ function App() {
     isValid(newColor);
   };
 
+  const handleGenerateAI = () => {
+    const apiKey = geminiStore.getApiKey();
+    if (!apiKey) {
+      setShowApiKeyDialog(true);
+    } else {
+      setShowPromptDialog(true);
+    }
+  };
+
+  const handlePromptSubmit = async (color: string) => {
+    setIsGenerating(false);
+    setShowPromptDialog(false);
+    isValid(color);
+  };
+
   return (
     <Layout>
       <section className="pt-24 font-sans">
@@ -144,14 +166,23 @@ function App() {
             <SavePalette colors={colors} action={store.add}></SavePalette>
           </div>
           <Palette colors={colors} variant="Primary" />
-          <Button
-            onClick={handleGenerateRandom}
-            variant={"secondary"}
-            className="rounded-[4px]"
-          >
-            Generate Random
-            <Shuffle />
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              onClick={handleGenerateRandom}
+              variant={"secondary"}
+              className="rounded-[4px]"
+            >
+              Generate Random
+              <Shuffle className="ml-2" />
+            </Button>
+            <Button
+              onClick={handleGenerateAI}
+              variant={"secondary"}
+              className="rounded-[4px]"
+            >
+              Generate with AI
+            </Button>
+          </div>
           <GraphicItems color={deferredColor} />
         </div>
       </section>
@@ -273,6 +304,25 @@ function App() {
           </div>
         )}
       </section>
+      <ApiKeyDialog
+        open={showApiKeyDialog}
+        onSubmit={(apiKey) => {
+          geminiStore.setApiKey(apiKey);
+          setShowApiKeyDialog(false);
+        }}
+        onCancel={() => setShowApiKeyDialog(false)}
+        setShowPromptDialog={setShowPromptDialog}
+      />
+      <PromptDialog
+        open={showPromptDialog}
+        onSubmit={handlePromptSubmit}
+        onCancel={() => {
+          setShowPromptDialog(false);
+          setIsGenerating(false);
+        }}
+        isLoading={isGenerating}
+        setIsLoading={setIsGenerating}
+      />
       <Footer />
     </Layout>
   );
