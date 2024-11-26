@@ -7,9 +7,7 @@ import {
   TooltipTrigger,
 } from "./ui/tooltip";
 
-type Props = {};
-
-export const EditPaletteName = (props: Props) => {
+export const EditPaletteName = () => {
   return (
     <TooltipProvider>
       <Tooltip delayDuration={200}>
