@@ -21,24 +21,33 @@ import ColorPicker from "./components/color-picker/ColorPicker";
 import { HexadecimalContext } from "./provider/hexadecimal/hexadecimal.context";
 import SavePaletteSection from "./sections/SavePalette";
 
-interface IAppOptions {
-  title:string;
-  subtitle:string;
+class AppFunctionalities {
+  public getColor(deferredColor:string){
+    const scaleColors: string[] = [ "#FFFFFF", deferredColor, "#000000" ];
+
+    return chroma
+    .scale(scaleColors)
+    .colors(11)
+    .slice(1, 10)
+    .map((color) => ({
+      color,
+      text: chroma.contrast(color, "#191919") > 4.5 ? "#191919" : "#FEFDFC",
+    }));
+  }
 }
 
-const appOptions: IAppOptions = {
-  title: "Generate your Custom Palette",
-  subtitle: "Saved Palettes"
-};
-
+const appFunctionalities: AppFunctionalities = new AppFunctionalities();
 
 function App() {
   const provider = useContext(HexadecimalContext);
   
   const [ color, setColor ] = useState("#ffffff");
+
   const [ , setLocation ] = useLocation();
 
   const deferredColor = useDeferredValue(color);
+  
+  const colors = useMemo(() => appFunctionalities.getColor(deferredColor), [ deferredColor ]);
 
   useEffect(() => {
     if (!ValidateHexadecimal(provider.hexColor)) return;
@@ -48,21 +57,6 @@ function App() {
 
     setLocation("?color=%23" + provider.hexColor.slice(1, 8));
   }, [ provider.hexColor, setLocation ]);
-  
-
-  const colors = useMemo(() => {
-    return chroma
-      .scale([ "#FFFFFF", deferredColor, "#000000" ])
-      .colors(11)
-      .slice(1, 10)
-      .map((color) => {
-        return {
-          color,
-          text: chroma.contrast(color, "#191919") > 4.5 ? "#191919" : "#FEFDFC",
-        };
-      });
-  }, [ deferredColor ]);
-
 
   return (
     <Layout>
@@ -73,7 +67,7 @@ function App() {
         />
         <div className="flex flex-col items-center justify-center w-full h-full mx-auto gap-[36px] mb-40">
           <h1 className="text-3xl font-bold font-headings lg:text-6xl">
-            {appOptions.title}
+            Generate your Custom Palette
           </h1>
           <Toaster />
           <ColorPicker />
