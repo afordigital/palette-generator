@@ -1,4 +1,4 @@
-import { Button } from "@components/ui/button.tsx";
+import { Button } from "@components/shared/ui/button.tsx";
 import { tailwindGenerator } from "@lib/tailwindGenerator.ts";
 import { clipboard } from "@utils/clipboard.ts";
 import { Copy } from "lucide-react";

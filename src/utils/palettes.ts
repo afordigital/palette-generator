@@ -26,13 +26,18 @@ function emit() {
   }
 }
 
-const store: Store = {
-  add(name, palette) {
+function save(palettes:Palettes){
+  localStorage.setItem('palettes', JSON.stringify(palettes));
+}
+
+class palettesStore  {
+  public add(name: string, palette: Palette): void {
     palettes = { ...palettes, [name]: palette };
     emit();
     localStorage.setItem('palettes', JSON.stringify(palettes));
-  },
-  rem(name) {
+  };
+
+  public rem(name: string):void  {
     palettes = Object.keys(palettes).reduce((acc, key) => {
       if (key !== name) {
         acc[key] = palettes[key];
@@ -40,9 +45,10 @@ const store: Store = {
       return acc;
     }, {} as Palettes);
     emit();
-    localStorage.setItem('palettes', JSON.stringify(palettes));
-  },
-  updatePaletteName(oldName, newName) {
+    save(palettes);
+  };
+  
+  public updatePaletteName(oldName: string, newName: string): string {
     newName = newName.trim();
     // Verify errors
     if (palettes[newName]) {
@@ -65,20 +71,25 @@ const store: Store = {
       palettes = updatedPalettes;
 
       emit();
-      localStorage.setItem('palettes', JSON.stringify(palettes));
+      save(palettes);
     }
     return '';
-  },
-  subscribe(listener) {
+  };
+
+  public subscribe(listener: Listener): Unsubscribe {
     listeners.push(listener);
 
     return () => {
       listeners = listeners.filter(l => l !== listener);
     };
-  },
-  getSnapshot() {
+  };
+
+  public getSnapshot(): Palettes {
     return palettes;
-  },
-};
+  };
+
+}
+
+const store: Store = new palettesStore();
 
 export default store;

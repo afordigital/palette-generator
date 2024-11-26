@@ -1,20 +1,19 @@
-import { Button } from "@components/ui/button.tsx";
+import { Button } from "@components/shared/ui/button.tsx";
 import { toast } from "sonner";
 import { tailwindGenerator } from "@lib/tailwindGenerator.ts";
-import type { Palette } from "@utils/palettes.ts";
 import { Save } from "lucide-react";
+import store from "@utils/palettes.ts";
 
 interface SavePaletteProps {
   colors: { color: string; text: string }[];
-  action: (name: string, palette: Palette) => void;
 }
 
-export function SavePalette({ colors, action }: SavePaletteProps) {
+export function SavePalette({ colors }: SavePaletteProps) {
   return (
     <Button
       onClick={() => {
         tailwindGenerator(colors).then(([ name, palette ]) => {
-          action(name, palette);
+          store.add(name, palette);
           toast(`Palette saved correctly! 🐭`);
         });
       }}
