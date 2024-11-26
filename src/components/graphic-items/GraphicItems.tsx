@@ -1,9 +1,9 @@
-import { CardComponent } from "./shared/items/Card";
-import { ChartComponent } from "./shared/items/ChartComponent";
-import { CheckboxComponent } from "./shared/items/Checkbox";
+import { CardComponent } from "../shared/items/Card";
+import { ChartComponent } from "../shared/items/ChartComponent";
+import { CheckboxComponent } from "../shared/items/Checkbox";
 import { memo } from "react";
-import { SliderComponent } from "./shared/items/SliderComponent";
-import { AlertComponent } from "./shared/items/AlertComponent";
+import { SliderComponent } from "../shared/items/SliderComponent";
+import { AlertComponent } from "../shared/items/AlertComponent";
 
 export type GraphicItemsProps = {
   color: string;

@@ -1,10 +1,10 @@
 import { useState, useSyncExternalStore } from "react";
 import store, { type Palettes } from "@utils/palettes";
-import { CopyPalette } from "@components/CopyPalette.tsx";
-import { DeletePalette } from "@components/DeletePalette.tsx";
+import { CopyPalette } from "@/components/copy-palette/CopyPalette";
+import { DeletePalette } from "@/components/delete-palette/DeletePalette";
 import { toast } from "sonner";
 import chroma from "chroma-js";
-import Palette from "@/components/Palette";
+import Palette from "@/components/palette/Palette";
 
 
 function SavePaletteSection() {

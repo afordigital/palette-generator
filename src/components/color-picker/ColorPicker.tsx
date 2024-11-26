@@ -1,5 +1,6 @@
 import "./color-picker.css";
 
+import { Badge } from "@components/shared/ui/badge";
 import { useContext } from "react";
 import { HexColorPicker } from "react-colorful";
 import { HexadecimalContext } from "@/provider/hexadecimal/hexadecimal.context";
@@ -26,14 +27,14 @@ export default function ColorPicker() {
         <>
             <HexColorPicker color={provider.hexColor} onChange={provider.setHexColor}/>
             <div>
-            <Button
-              onClick={() => colorPickerHandles.generateRandomColor(provider.setHexColor)}
-              variant={"secondary"}
-              className="rounded-[4px]"
-            >
-              Generate Random
-              <Shuffle />
-            </Button>
+                <Button
+                    onClick={() => colorPickerHandles.generateRandomColor(provider.setHexColor)}
+                    variant={"secondary"}
+                >
+                    Generate Random
+                    <Shuffle />
+                </Button>
+                <Badge className="py-[9px]">{provider.hexColor}</Badge>
             </div>
         </>
     );
