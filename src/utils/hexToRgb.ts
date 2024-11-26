@@ -14,7 +14,5 @@ export function hexToRgb(hex:string):string {
     const g = parseInt(hex.substring(2, 4), 16);
     const b = parseInt(hex.substring(4, 6), 16);
 
-    console.log({ r, g, b });
-
     return `rgb(${r},${g},${b})`;
 }
