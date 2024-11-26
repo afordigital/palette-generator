@@ -10,6 +10,7 @@ export default {
 		fontFamily: {
 			headings: ["CalSans", ...defaultTheme.fontFamily.sans],
         	sans: ["InterVariable", ...defaultTheme.fontFamily.sans],
+        	mono: ["DmSans", ...defaultTheme.fontFamily.sans],
       },
   		borderRadius: {
   			lg: 'var(--radius)',

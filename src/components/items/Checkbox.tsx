@@ -18,12 +18,12 @@ export const CheckboxComponent = ({ color }: CheckboxProps) => {
       </div>
       <div className="flex items-center gap-2">
         <Checkbox
-          id="email"
+          id="checkbox2"
           defaultChecked
           style={{ "--color": color }}
           className="rounded-[4px] data-[state=checked]:bg-[var(--color)] data-[state=checked]:border-[var(--color)] "
         />
-        <Label htmlFor="email">Your email address</Label>
+        <Label htmlFor="checkbox2">Your email address</Label>
       </div>
     </>
   );

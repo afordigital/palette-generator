@@ -20,8 +20,8 @@ export function SavePalette({ colors, action }: SavePaletteProps) {
       }}
       className="ml-4 rounded-[4px]"
     >
-      Save Palette
       <Save />
+      Save Palette
     </Button>
   );
 }

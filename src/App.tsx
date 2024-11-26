@@ -16,7 +16,7 @@ import { debounce } from "@utils/debounce";
 import { DeletePalette } from "@components/DeletePalette.tsx";
 import { getRandomColor } from "@utils/getRandomColor";
 import { SavePalette } from "@components/SavePalette.tsx";
-import { Shuffle } from "lucide-react";
+import { Save, Shuffle } from "lucide-react";
 import { toast } from "sonner";
 import { Toaster } from "@components/ui/sonner";
 import { useLocation } from "wouter";
@@ -25,6 +25,8 @@ import GraphicItems from "@components/GraphicItems";
 import Layout from "./layouts/Layout";
 import Palette from "@components/Palette";
 import store, { type Palettes } from "@utils/palettes";
+import LittlePalette from "./components/LittlePalette";
+import { EditPaletteName } from "./components/EditPaletteName";
 
 function App() {
   const [color, setColor] = useState("#ffffff");
@@ -116,47 +118,47 @@ function App() {
             Generate your Custom Palette
           </h1>
           <Toaster />
-          <div className="flex flex-col items-center gap-2 md:flex-row"> 
+          <div className="flex flex-col items-center gap-2 md:flex-row">
+            <label htmlFor="current-colors" className="relative">
+              <input
+                type="color"
+                value={deferredColor}
+                onChange={handleColorChange}
+                className="absolute left-2 top-[6px]"
+              ></input>
+              <input
+                id="current-color"
+                value={colorAux}
+                onChange={handleTextInputChange}
+                placeholder="#FDA12D"
+                className="py-[6px] pl-16 font-mono border-[1px] border-slate-700 rounded-[4px]"
+              />
+            </label>
             <SavePalette colors={colors} action={store.add}></SavePalette>
-              <label htmlFor="current-colors" className="relative">
-                <input
-                  type="color"
-                  value={deferredColor}
-                  onChange={handleColorChange}
-                  className="absolute left-2 top-[6px]"
-                ></input>
-                <input
-                  id="current-color"
-                  value={colorAux}
-                  onChange={handleTextInputChange}
-                  placeholder="#FDA12D"
-                  className="py-[6px] pl-16 border-[1px] border-slate-700 rounded-[4px]"
-                />
-              </label>
-            </div>
-          <Palette colors={colors} variant="Primary" /> 
+          </div>
+          <Palette colors={colors} variant="Primary" />
           <Button
-              onClick={handleGenerateRandom}
-              variant={"secondary"}
-              className="rounded-[4px]"
-            >
-              Generate Random
-              <Shuffle />
-            </Button>
+            onClick={handleGenerateRandom}
+            variant={"secondary"}
+            className="rounded-[4px]"
+          >
+            Generate Random
+            <Shuffle />
+          </Button>
           <GraphicItems color={deferredColor} />
         </div>
       </section>
-      <section className="flex gap-[48px] min-h-screen">
+      <section className="flex gap-[32px] min-h-screen">
         {savedPalettes && Object.keys(savedPalettes).length > 0 && (
           <div className="flex flex-col w-full gap-4">
             <h2 className="pb-6 text-4xl font-bold font-headings">
               Saved Palettes
             </h2>
-            <div className="grid gap-x-8 gap-y-8 grid-cols-[repeat(auto-fit,minmax(250px,1fr))] place-content-center w-full">
+            <div className="flex flex-wrap justify-between w-full max-w-full gap-y-8">
               {Object.entries(savedPalettes).map(([name, palette]) => {
                 return (
                   <div key={name} className="flex flex-col gap-[12px]">
-                    <div className="flex justify-between">
+                    <div className="flex justify-between ">
                       {isEditNamePalette !== "" &&
                       isEditNamePalette === name ? (
                         <label
@@ -195,7 +197,10 @@ function App() {
                         </label>
                       ) : (
                         <h4
-                          className="w-full font-semibold text-md"
+                          className="w-full font-semibold cursor-pointer text-md"
+                          onClick={() => {
+                            setColor(palette[500]);
+                          }}
                           onDoubleClick={() => {
                             handledEditNamePalette(name);
                           }}
@@ -205,8 +210,9 @@ function App() {
                       )}
                       {!(
                         isEditNamePalette !== "" && isEditNamePalette === name
-                      ) && (
+                      ) ? (
                         <div className="flex">
+                          <EditPaletteName />
                           <CopyPalette
                             colors={Object.entries(palette).map(
                               ([, color]) => ({
@@ -223,11 +229,17 @@ function App() {
                             action={store.rem}
                           ></DeletePalette>
                         </div>
+                      ) : (
+                        <Button
+                          size={"sm"}
+                          variant={"outline"}
+                          className="ml-2 rounded-[4px]"
+                        >
+                          <Save />
+                        </Button>
                       )}
                     </div>
-                    <Palette
-                      variant="Secondary"
-                      position="start"
+                    <LittlePalette
                       colors={Object.entries(palette).map(([, color]) => ({
                         color,
                         text:

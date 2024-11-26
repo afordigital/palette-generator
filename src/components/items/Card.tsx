@@ -9,10 +9,20 @@ import {
 } from "@components/ui/card";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { colord } from "colord";
 
 export const CardComponent = ({ color }: { color: string }) => {
+  const _color = colord(color === "currentColor" ? "#7affa6" : color);
+
+  const textColor = _color.isLight()
+    ? _color.darken(0.75).toHex()
+    : _color.lighten(0.75).toHex();
+
   return (
-    <Card className="h-fit">
+    <Card
+      style={{ "--color": color, "--hoverColor": color + "99" }}
+      className="h-fit"
+    >
       <CardHeader>
         <CardTitle>Create your account</CardTitle>
         <CardDescription>
@@ -24,7 +34,7 @@ export const CardComponent = ({ color }: { color: string }) => {
           <Label htmlFor="email">Email</Label>
           <Input
             id="email"
-            className="rounded-[4px]"
+            className="rounded-[4px] focus:border-[var(--color)]"
             placeholder="Enter your email address..."
           />
         </div>
@@ -33,16 +43,16 @@ export const CardComponent = ({ color }: { color: string }) => {
           <Input
             id="password"
             type="password"
-            className="rounded-[4px]"
+            className="rounded-[4px] focus:border-[var(--color)]"
             placeholder="Enter your password..."
           />
         </div>
       </CardContent>
       <CardFooter className="flex flex-col gap-4">
         <Button
-          style={{ "--color": color }}
           variant="default"
-          className="w-full bg-[var(--color)] rounded-[4px]"
+          style={{ color: textColor }}
+          className="w-full bg-[var(--color)] hover:bg-[var(--hoverColor)] rounded-[4px]"
         >
           Create account
         </Button>

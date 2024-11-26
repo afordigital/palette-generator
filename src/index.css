@@ -43,3 +43,11 @@
   font-display: swap;
   src: url("/fonts/CalSans-SemiBold.woff2") format("woff2");
 }
+
+@font-face {
+  font-family: DmSans;
+  font-style: regular;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/DmMonoLatin.woff2") format("woff2");
+}

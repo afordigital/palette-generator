@@ -44,7 +44,7 @@ export const Palette = ({
         className={`grid ${
           variant === "Primary"
             ? "grid-cols-[repeat(auto-fit,minmax(0px,100px))]"
-            : "grid-cols-[repeat(auto-fit,minmax(0px,30px))]"
+            : "flex flex-row"
         } ${contentPosition} w-full`}
       >
         {colors.map(({ color, text }, index) => {
@@ -60,12 +60,16 @@ export const Palette = ({
                   style={{ backgroundColor: color, color: text }}
                   className={` ${
                     variant === "Primary"
-                      ? "w-[100px] h-[100px]"
-                      : "w-[32px] h-[32px]"
+                      ? `w-[100px] h-[100px] ${
+                          index === 0 && "rounded-l-[8px]"
+                        } ${index === 8 && "rounded-r-[8px]"}`
+                      : "w-[48px] h-[48px]"
                   } hover:border-2 hover:border-black`}
                 ></TooltipTrigger>
                 {variant === "Primary" && (
-                  <p className="text-sm text-slate-600">{color}</p>
+                  <p className="font-mono text-sm break-all text-slate-600">
+                    {color}
+                  </p>
                 )}
               </div>
               <TooltipContent>

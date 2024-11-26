@@ -33,7 +33,7 @@ export function DeletePalette({ name, action }: DeletePaletteProps) {
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
+              palette.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
