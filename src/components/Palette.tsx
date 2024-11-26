@@ -44,7 +44,7 @@ export const Palette = ({
         className={`grid ${
           variant === "Primary"
             ? "grid-cols-[repeat(auto-fit,minmax(0px,100px))]"
-            : "grid-cols-[repeat(auto-fit,minmax(0px,30px))]"
+            : "grid-cols-[repeat(auto-fit,minmax(0px,32px))]"
         } ${contentPosition} w-full`}
       >
         {colors.map(({ color, text }, index) => {
@@ -61,7 +61,7 @@ export const Palette = ({
                   className={` ${
                     variant === "Primary"
                       ? "w-[100px] h-[100px]"
-                      : "w-[32px] h-[32px]"
+                      : "w-[48px] h-[48px]"
                   } hover:border-2 hover:border-black`}
                 ></TooltipTrigger>
                 {variant === "Primary" && (

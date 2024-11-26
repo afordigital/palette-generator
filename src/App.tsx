@@ -114,7 +114,7 @@ function App() {
             Generate your Custom Palette
           </h1>
           <Toaster />
-          <div className="flex flex-col items-center gap-2 md:flex-row"> 
+          <div className="flex flex-col-3 items-center gap-2 md:flex-row"> 
             <SavePalette colors={colors} action={store.add}></SavePalette>
               <label htmlFor="current-colors" className="relative">
                 <input
@@ -146,14 +146,14 @@ function App() {
       </section>
       <section className="flex gap-[48px] min-h-screen">
         {savedPalettes && Object.keys(savedPalettes).length > 0 && (
-          <div className="flex flex-col w-full gap-4">
+          <div className="flex flex-col w-full gap-2">
             <h2 className="pb-6 text-4xl font-bold font-headings">
               Saved Palettes
             </h2>
-            <div className="grid gap-x-8 gap-y-8 grid-cols-[repeat(auto-fit,minmax(250px,1fr))] place-content-center w-full">
+            <div className="grid grid-cols-3 gap-x-8 gap-y-8 grid-cols-[repeat(auto-fit,minmax(250px,1fr))] place-content-center w-full">
               {Object.entries(savedPalettes).map(([name, palette]) => {
                 return (
-                  <div key={name} className="flex flex-col gap-[12px]">
+                  <div key={name} className="flex flex-col gap-[12px] max-w-[290px]">
                     <div className="flex justify-between">
                       {isEditNamePalette !== "" &&
                       isEditNamePalette === name ? (
@@ -204,7 +204,7 @@ function App() {
                       {!(
                         isEditNamePalette !== "" && isEditNamePalette === name
                       ) && (
-                        <div className="flex">
+                        <div className="flex gap-2 m-">
                           <CopyPalette
                             colors={Object.entries(palette).map(
                               ([, color]) => ({
