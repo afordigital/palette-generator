@@ -27,6 +27,13 @@ import Palette from "@components/Palette";
 import store, { type Palettes } from "@utils/palettes";
 import LittlePalette from "./components/LittlePalette";
 import { EditPaletteName } from "./components/EditPaletteName";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@radix-ui/react-tooltip";
+import { Footer } from "./components/Footer";
 
 function App() {
   const [color, setColor] = useState("#ffffff");
@@ -111,9 +118,9 @@ function App() {
       <section className="pt-24 font-sans">
         <div
           style={{ "--color": deferredColor + "64" }}
-          className="absolute inset-0 bg-gradient-to-b from-[var(--color)] to-white to-25% h-full -z-10"
+          className="absolute inset-0 bg-gradient-to-b from-[var(--color)] to-white to-25% -z-10"
         />
-        <div className="flex flex-col items-center justify-center w-full h-full mx-auto gap-[36px] mb-40">
+        <div className="flex flex-col items-center justify-center w-full mx-auto gap-[36px] mb-10">
           <h1 className="text-3xl font-bold font-headings lg:text-6xl">
             Generate your Custom Palette
           </h1>
@@ -148,7 +155,7 @@ function App() {
           <GraphicItems color={deferredColor} />
         </div>
       </section>
-      <section className="flex gap-[32px] min-h-screen">
+      <section className="flex gap-[32px]">
         {savedPalettes && Object.keys(savedPalettes).length > 0 && (
           <div className="flex flex-col w-full gap-4">
             <h2 className="pb-6 text-4xl font-bold font-headings">
@@ -196,17 +203,28 @@ function App() {
                           />
                         </label>
                       ) : (
-                        <h4
-                          className="w-full font-semibold cursor-pointer text-md"
-                          onClick={() => {
-                            setColor(palette[500]);
-                          }}
-                          onDoubleClick={() => {
-                            handledEditNamePalette(name);
-                          }}
-                        >
-                          {name.replaceAll("-", " ")}
-                        </h4>
+                        <TooltipProvider>
+                          <Tooltip delayDuration={200}>
+                            <TooltipTrigger>
+                              <h4
+                                className="w-full font-semibold cursor-pointer text-slate-700 hover:text-slate-900 text-md"
+                                onClick={() => {
+                                  setColor(palette[500]);
+                                }}
+                                onDoubleClick={() => {
+                                  handledEditNamePalette(name);
+                                }}
+                              >
+                                {name.replaceAll("-", " ")}
+                              </h4>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p className="px-2 py-1 text-[12px] text-white rounded-[4px] bg-slate-800">
+                                Select palette
+                              </p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
                       )}
                       {!(
                         isEditNamePalette !== "" && isEditNamePalette === name
@@ -255,6 +273,7 @@ function App() {
           </div>
         )}
       </section>
+      <Footer />
     </Layout>
   );
 }
