@@ -24,16 +24,21 @@ const providerHandler: ProviderHandlers = new ProviderHandlers();
 
 function HexadecimalProvider({children}: IHexadecimalProviderProps) {
     const [ hexColor, setHexColor ] = useState<string>("");
+
     const deferredColor = useDeferredValue(hexColor);
 
     useEffect(() => {
         providerHandler.verifyColorEntered(setHexColor);
     },[]);
     
-    const values:IValuesProvider = {
+    const values: IValuesProvider = {
         hexColor: deferredColor,
         rgbColor: "",
-        setHexColor: (hex:string) => debounce({callback: () => setHexColor(hex)}),
+        setHexColor: (hex:string, useDebounce?: boolean) => {
+            return useDebounce ? 
+            debounce({callback: () => setHexColor(hex)}) :
+            setHexColor(hex);
+        }
     };
 
     return (

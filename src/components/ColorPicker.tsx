@@ -10,7 +10,7 @@ function ColorPicker() {
                 <input
                     value={provider.hexColor}
                     type="color"
-                    onChange={(value) => provider.setHexColor(value.target.value)}
+                    onChange={(value) => provider.setHexColor(value.target.value, true)}
                     className="absolute left-2 top-[6px]"
                 >
                 </input>

@@ -7,11 +7,10 @@ let timeout: ReturnType<typeof setTimeout> | null = null;
 
 export function debounce({ callback, delay }: debounceParams): void {
 
-    if (!timeout) clearTimeout(timeout!);
+    if (timeout) clearTimeout(timeout);
 
     timeout = setTimeout(() => {
-        // callback is if you want to pass a functionality to execute
-        callback!();
-    }, delay ?? 100);
+        callback(); 
+    }, delay);
 }
 
