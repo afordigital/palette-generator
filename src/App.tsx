@@ -34,44 +34,9 @@ import {
   TooltipTrigger,
 } from "@radix-ui/react-tooltip";
 import { Footer } from "./components/Footer";
-
-class AppFunctionalities {
-  public getColor(deferredColor:string){
-    const scaleColors: string[] = [ "#FFFFFF", deferredColor, "#000000" ];
-
-    return chroma
-    .scale(scaleColors)
-    .colors(11)
-    .slice(1, 10)
-    .map((color) => ({
-      color,
-      text: chroma.contrast(color, "#191919") > 4.5 ? "#191919" : "#FEFDFC",
-    }));
-  }
-}
-
-const appFunctionalities: AppFunctionalities = new AppFunctionalities();
-
-class AppFunctionalities {
-  public getColor(deferredColor:string){
-    const scaleColors: string[] = [ "#FFFFFF", deferredColor, "#000000" ];
-
-    return chroma
-    .scale(scaleColors)
-    .colors(11)
-    .slice(1, 10)
-    .map((color) => ({
-      color,
-      text: chroma.contrast(color, "#191919") > 4.5 ? "#191919" : "#FEFDFC",
-    }));
-  }
-}
-
-const appFunctionalities: AppFunctionalities = new AppFunctionalities();
+import PromptDialog from "@components/PromptDialog";
 
 function App() {
-  const provider = useContext(HexadecimalContext);
-
   const [color, setColor] = useState("#ffffff");
   const [colorAux, setColorAux] = useState(color);
   const deferredColor = useDeferredValue(color);
@@ -89,6 +54,9 @@ function App() {
   );
 
   const [, setLocation] = useLocation();
+
+  const [showPromptDialog, setShowPromptDialog] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const colors = useMemo(() => {
     return chroma
@@ -149,6 +117,16 @@ function App() {
     isValid(newColor);
   };
 
+  const handleGenerateAI = () => {
+    setShowPromptDialog(true);
+  };
+
+  const handlePromptSubmit = async (color: string) => {
+    setIsGenerating(false);
+    setShowPromptDialog(false);
+    isValid(color);
+  };
+
   return (
     <Layout>
       <section className="pt-24 font-sans">
@@ -180,14 +158,23 @@ function App() {
             <SavePalette colors={colors} action={store.add}></SavePalette>
           </div>
           <Palette colors={colors} variant="Primary" />
-          <Button
-            onClick={handleGenerateRandom}
-            variant={"secondary"}
-            className="rounded-[4px]"
-          >
-            Generate Random
-            <Shuffle />
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              onClick={handleGenerateRandom}
+              variant={"secondary"}
+              className="rounded-[4px]"
+            >
+              Generate Random
+              <Shuffle className="ml-2" />
+            </Button>
+            <Button
+              onClick={handleGenerateAI}
+              variant={"secondary"}
+              className="rounded-[4px]"
+            >
+              Generate with AI
+            </Button>
+          </div>
           <GraphicItems color={deferredColor} />
         </div>
       </section>
@@ -197,7 +184,7 @@ function App() {
             <h2 className="pb-6 text-4xl font-bold font-headings">
               Saved Palettes
             </h2>
-            <div className="flex flex-wrap gap-[70px] w-full max-w-full gap-y-8">
+            <div className="flex flex-wrap justify-between w-full max-w-full gap-y-8">
               {Object.entries(savedPalettes).map(([name, palette]) => {
                 return (
                   <div key={name} className="flex flex-col gap-[12px]">
@@ -309,6 +296,16 @@ function App() {
           </div>
         )}
       </section>
+      <PromptDialog
+        open={showPromptDialog}
+        onSubmit={handlePromptSubmit}
+        onCancel={() => {
+          setShowPromptDialog(false);
+          setIsGenerating(false);
+        }}
+        isLoading={isGenerating}
+        setIsLoading={setIsGenerating}
+      />
       <Footer />
     </Layout>
   );
