@@ -1,6 +1,6 @@
 type Listener = () => void;
 
-let apiKey: string | null = localStorage.getItem("gemini_api_key");
+let apiKey: string | null = import.meta.env.VITE_GEMINI_API_KEY ?? null;
 let listeners: Listener[] = [];
 
 function emit() {
