@@ -6,28 +6,23 @@ import {
   useEffect,
   useMemo,
   useState,
-  useSyncExternalStore,
 } from "react";
 
 import { Button } from "@components/ui/button";
-import { CopyPalette } from "@components/CopyPalette.tsx";
-import { DeletePalette } from "@components/DeletePalette.tsx";
 import { getRandomColor } from "@utils/getRandomColor";
 import { SavePalette } from "@components/SavePalette.tsx";
-import { Save, Shuffle } from "lucide-react";
-import { toast } from "sonner";
+import { Shuffle } from "lucide-react";
 import { Toaster } from "@components/ui/sonner";
 import { useLocation } from "wouter";
 import chroma from "chroma-js";
 import GraphicItems from "@components/GraphicItems";
 import Layout from "./layouts/Layout";
 import Palette from "@components/Palette";
-import store, { type Palettes } from "@utils/palettes";
-import LittlePalette from "./components/LittlePalette";
-import { EditPaletteName } from "./components/EditPaletteName";
+import store from "@utils/palettes";
 import { ValidateHexadecimal } from "./utils/hexadecimal-validator";
 import { HexadecimalContext } from "./provider/hexadecimal/hexadecimal.context";
 import ColorPicker from "./components/ColorPicker";
+import SavePaletteSection from "./sections/save-palette-section/SavePaletteSection";
 
 class AppFunctionalities {
   public getColor(deferredColor:string){
@@ -52,22 +47,8 @@ function App() {
   const [, setLocation] = useLocation();
 
   const [color, setColor] = useState("#ffffff");
-  
-
-  const [isEditNamePalette, setIsEditNamePalette] = useState("");
-  const [valueEditNamePalette, setValueEditNamePalette] = useState("");
 
   const colors = useMemo(() => appFunctionalities.getColor(color), [ color ]);
-
-  const handledEditNamePalette = (name: string) => {
-    setIsEditNamePalette(name);
-    setValueEditNamePalette(name);
-  };
-
-  const savedPalettes = useSyncExternalStore<Palettes>(
-    store.subscribe,
-    store.getSnapshot
-  );
 
   const isValid = useCallback((newColor: string) => {
     const regex = /^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/;
@@ -121,112 +102,8 @@ function App() {
           <GraphicItems color={color} />
         </div>
       </section>
-      <section className="flex gap-[32px] min-h-screen">
-        {savedPalettes && Object.keys(savedPalettes).length > 0 && (
-          <div className="flex flex-col w-full gap-4">
-            <h2 className="pb-6 text-4xl font-bold font-headings">
-              Saved Palettes
-            </h2>
-            <div className="flex flex-wrap justify-between w-full max-w-full gap-y-8">
-              {Object.entries(savedPalettes).map(([name, palette]) => {
-                return (
-                  <div key={name} className="flex flex-col gap-[12px]">
-                    <div className="flex justify-between ">
-                      {isEditNamePalette !== "" &&
-                      isEditNamePalette === name ? (
-                        <label
-                          className={`flex rounded-[4px] border-2 w-60 ${
-                            isEditNamePalette !== "" ? " border-black" : ""
-                          }`}
-                        >
-                          <input
-                            type="text"
-                            value={valueEditNamePalette}
-                            onChange={(event) => {
-                              setValueEditNamePalette(event.target.value);
-                            }}
-                            className="px-2 mb-1 font-semibold bg-transparent outline-none text-md"
-                            placeholder={"..."}
-                            autoFocus
-                            onBlur={() => {
-                              setIsEditNamePalette("");
-                            }}
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter") {
-                                const isError = store.updatePaletteName(
-                                  name,
-                                  valueEditNamePalette
-                                );
-                                if (isError !== "") {
-                                  toast.error(isError);
-                                }
-                                setIsEditNamePalette("");
-                              } else if (e.key === "Escape") {
-                                setValueEditNamePalette("");
-                                setIsEditNamePalette("");
-                              }
-                            }}
-                          />
-                        </label>
-                      ) : (
-                        <h4
-                          className="w-full font-semibold cursor-pointer text-md"
-                          onClick={() => {
-                            setColor(palette[500]);
-                          }}
-                          onDoubleClick={() => {
-                            handledEditNamePalette(name);
-                          }}
-                        >
-                          {name.replaceAll("-", " ")}
-                        </h4>
-                      )}
-                      {!(
-                        isEditNamePalette !== "" && isEditNamePalette === name
-                      ) ? (
-                        <div className="flex">
-                          <EditPaletteName />
-                          <CopyPalette
-                            colors={Object.entries(palette).map(
-                              ([, color]) => ({
-                                color,
-                                text:
-                                  chroma.contrast(color, "#191919") > 4.5
-                                    ? "#191919"
-                                    : "#FEFDFC",
-                              })
-                            )}
-                          ></CopyPalette>
-                          <DeletePalette
-                            name={name}
-                            action={store.rem}
-                          ></DeletePalette>
-                        </div>
-                      ) : (
-                        <Button
-                          size={"sm"}
-                          variant={"outline"}
-                          className="ml-2 rounded-[4px]"
-                        >
-                          <Save />
-                        </Button>
-                      )}
-                    </div>
-                    <LittlePalette
-                      colors={Object.entries(palette).map(([, color]) => ({
-                        color,
-                        text:
-                          chroma.contrast(color, "#191919") > 4.5
-                            ? "#191919"
-                            : "#FEFDFC",
-                      }))}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
+      <section>
+        <SavePaletteSection />
       </section>
     </Layout>
   );
