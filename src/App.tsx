@@ -14,17 +14,18 @@ import { SavePalette } from "@components/SavePalette.tsx";
 import { Shuffle } from "lucide-react";
 import { Toaster } from "@components/ui/sonner";
 import { useLocation } from "wouter";
+import { ValidateHexadecimal } from "./utils/hexadecimal-validator";
+import { HexadecimalContext } from "./provider/hexadecimal/hexadecimal.context";
+
 import chroma from "chroma-js";
 import GraphicItems from "@components/GraphicItems";
 import Layout from "./layouts/Layout";
 import Palette from "@components/Palette";
 import store from "@utils/palettes";
-import { ValidateHexadecimal } from "./utils/hexadecimal-validator";
-import { HexadecimalContext } from "./provider/hexadecimal/hexadecimal.context";
 import ColorPicker from "./components/ColorPicker";
 import SavePaletteSection from "./sections/save-palette-section/SavePaletteSection";
 
-class AppFunctionalities {
+class AppController {
   public getColor(deferredColor:string){
     const scaleColors: string[] = [ "#FFFFFF", deferredColor, "#000000" ];
 
@@ -37,9 +38,17 @@ class AppFunctionalities {
       text: chroma.contrast(color, "#191919") > 4.5 ? "#191919" : "#FEFDFC",
     }));
   }
+
+  public getRandom(): string | undefined {
+    const hexadecimalRandom: string = getRandomColor();
+
+    if (!ValidateHexadecimal(hexadecimalRandom)) return;
+
+    return hexadecimalRandom;
+  }
 }
 
-const appFunctionalities: AppFunctionalities = new AppFunctionalities();
+const controller: AppController = new AppController();
 
 function App() {
   const provider = useContext(HexadecimalContext);
@@ -48,18 +57,7 @@ function App() {
 
   const [color, setColor] = useState("#ffffff");
 
-  const colors = useMemo(() => appFunctionalities.getColor(color), [ color ]);
-
-  const isValid = useCallback((newColor: string) => {
-    const regex = /^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/;
-
-    if (regex.test(newColor)) {
-      setColor(newColor);
-      setLocation("?color=%23" + newColor.slice(1, 8));
-      return true;
-    }
-    return false;
-  }, []);
+  const colors = useMemo(() => controller.getColor(color), [ color ]);
 
   useEffect(() => {
     if (!ValidateHexadecimal(provider.hexColor)) return;
@@ -69,12 +67,6 @@ function App() {
 
     setLocation("?color=%23" + provider.hexColor.slice(1, 8));
   }, [ provider.hexColor, setLocation ]);
-
-
-  const handleGenerateRandom = () => {
-    const newColor = getRandomColor();
-    isValid(newColor);
-  };
 
   return (
     <Layout>
@@ -92,7 +84,7 @@ function App() {
           <SavePalette colors={colors} action={store.add}></SavePalette>
           <Palette colors={colors} variant="Primary" />
           <Button
-            onClick={handleGenerateRandom}
+            onClick={() => provider.setHexColor(controller.getRandom()!)}
             variant={"secondary"}
             className="rounded-[4px]"
           >
