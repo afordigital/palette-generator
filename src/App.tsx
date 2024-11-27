@@ -1,28 +1,27 @@
 import "./App.css";
 
 import {
-  useCallback,
   useContext,
   useEffect,
   useMemo,
   useState,
 } from "react";
 
-import { Button } from "@components/ui/button";
+import { Button } from "@/components/shared/ui/button";
 import { getRandomColor } from "@utils/getRandomColor";
-import { SavePalette } from "@components/SavePalette.tsx";
+import { SavePalette } from "@/components/save-palette/SavePalette";
 import { Shuffle } from "lucide-react";
-import { Toaster } from "@components/ui/sonner";
+import { Toaster } from "@/components/shared/ui/sonner";
 import { useLocation } from "wouter";
 import { ValidateHexadecimal } from "./utils/hexadecimal-validator";
 import { HexadecimalContext } from "./provider/hexadecimal/hexadecimal.context";
 
 import chroma from "chroma-js";
-import GraphicItems from "@components/GraphicItems";
+import GraphicItems from "@components/graphic-items/GraphicItems";
 import Layout from "./layouts/Layout";
-import Palette from "@components/Palette";
+import Palette from "@/components/palette/Palette";
 import store from "@utils/palettes";
-import ColorPicker from "./components/ColorPicker";
+import ColorPicker from "./components/color-picker/ColorPicker";
 import SavePaletteSection from "./sections/save-palette-section/SavePaletteSection";
 
 class AppController {

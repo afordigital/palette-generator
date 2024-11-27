@@ -1,7 +1,7 @@
 import { Edit } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "../shared/ui/button";
 
-type Props = {};
+type Props = object;
 
 export const EditPaletteName = (props: Props) => {
   return (

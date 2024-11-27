@@ -1,4 +1,4 @@
-import { Button } from "@components/ui/button.tsx";
+import { Button } from "@/components/shared/ui/button";
 import { Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -10,7 +10,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@components/ui/alert-dialog";
+} from "@/components/shared/ui/alert-dialog";
 
 interface DeletePaletteProps {
   name: string;

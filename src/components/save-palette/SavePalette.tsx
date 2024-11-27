@@ -1,4 +1,4 @@
-import { Button } from "@components/ui/button.tsx";
+import { Button } from "@/components/shared/ui/button";
 import { toast } from "sonner";
 import { tailwindGenerator } from "@lib/tailwindGenerator.ts";
 import type { Palette } from "@utils/palettes.ts";

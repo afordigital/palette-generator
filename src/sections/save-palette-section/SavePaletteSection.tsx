@@ -1,8 +1,8 @@
-import { CopyPalette } from "@/components/CopyPalette";
-import { DeletePalette } from "@/components/DeletePalette";
-import { EditPaletteName } from "@/components/EditPaletteName";
-import LittlePalette from "@/components/LittlePalette";
-import { Button } from "@/components/ui/button";
+import { CopyPalette } from "@/components/copy-palette/CopyPalette";
+import { DeletePalette } from "@/components/delete-palette/DeletePalette";
+import { EditPaletteName } from "@/components/edit-palette-name/EditPaletteName";
+import LittlePalette from "@/components/little-palette/LittlePalette";
+import { Button } from "@/components/shared/ui/button";
 import { HexadecimalContext } from "@/provider/hexadecimal/hexadecimal.context";
 import store, { Palette, Palettes } from "@/utils/palettes";
 import chroma from "chroma-js";
