@@ -52,6 +52,23 @@ class AppFunctionalities {
 
 const appFunctionalities: AppFunctionalities = new AppFunctionalities();
 
+class AppFunctionalities {
+  public getColor(deferredColor:string){
+    const scaleColors: string[] = [ "#FFFFFF", deferredColor, "#000000" ];
+
+    return chroma
+    .scale(scaleColors)
+    .colors(11)
+    .slice(1, 10)
+    .map((color) => ({
+      color,
+      text: chroma.contrast(color, "#191919") > 4.5 ? "#191919" : "#FEFDFC",
+    }));
+  }
+}
+
+const appFunctionalities: AppFunctionalities = new AppFunctionalities();
+
 function App() {
   const provider = useContext(HexadecimalContext);
 
