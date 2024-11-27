@@ -7,8 +7,8 @@ export interface IValuesProvider {
 }
 
 const defaultValues:IValuesProvider = {
-    hexColor: '#aabbcc',
-    rgbColor: "",
+    hexColor: '',
+    rgbColor: '',
     setHexColor: () => {}
 };
 

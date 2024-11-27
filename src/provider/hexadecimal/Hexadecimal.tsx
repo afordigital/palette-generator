@@ -1,9 +1,9 @@
 
-import { useEffect, useState } from "react";
+import { useDeferredValue, useEffect, useState } from "react";
 import { HexadecimalContext, IValuesProvider } from "./hexadecimal.context";
-import { debounce } from "@/utils/debounce";
 import { getRandomColor } from "@/utils/getRandomColor";
 import { ValidateHexadecimal } from "@/utils/hexadecimal-validator";
+import { debounce } from "@/utils/debounce";
 
 interface IHexadecimalProviderProps {
     children: React.ReactNode
@@ -24,16 +24,16 @@ const providerHandler: ProviderHandlers = new ProviderHandlers();
 
 function HexadecimalProvider({children}: IHexadecimalProviderProps) {
     const [ hexColor, setHexColor ] = useState<string>("");
+    const deferredColor = useDeferredValue(hexColor);
 
     useEffect(() => {
         providerHandler.verifyColorEntered(setHexColor);
     },[]);
     
-
     const values:IValuesProvider = {
-        hexColor,
+        hexColor: deferredColor,
         rgbColor: "",
-        setHexColor: (hex:string) => debounce({callback: () => setHexColor(hex)})
+        setHexColor: (hex:string) => debounce({callback: () => setHexColor(hex)}),
     };
 
     return (

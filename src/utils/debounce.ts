@@ -3,8 +3,9 @@ interface debounceParams {
     delay?: number;
 }
 
+let timeout: ReturnType<typeof setTimeout> | null = null;
+
 export function debounce({ callback, delay }: debounceParams): void {
-    let timeout: ReturnType<typeof setTimeout> | null = null;
 
     if (!timeout) clearTimeout(timeout!);
 

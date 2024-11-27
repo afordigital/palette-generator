@@ -10,6 +10,7 @@ interface SavePaletteProps {
 }
 
 export function SavePalette({ colors, action }: SavePaletteProps) {
+  
   return (
     <Button
       onClick={() => {

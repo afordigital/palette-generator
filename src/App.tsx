@@ -3,7 +3,6 @@ import "./App.css";
 import {
   useCallback,
   useContext,
-  useDeferredValue,
   useEffect,
   useMemo,
   useState,
@@ -49,6 +48,7 @@ const appFunctionalities: AppFunctionalities = new AppFunctionalities();
 
 function App() {
   const provider = useContext(HexadecimalContext);
+
   const [, setLocation] = useLocation();
 
   const [color, setColor] = useState("#ffffff");
@@ -57,9 +57,7 @@ function App() {
   const [isEditNamePalette, setIsEditNamePalette] = useState("");
   const [valueEditNamePalette, setValueEditNamePalette] = useState("");
 
-  const deferredColor = useDeferredValue(color);
-
-  const colors = useMemo(() => appFunctionalities.getColor(deferredColor), [ deferredColor ]);
+  const colors = useMemo(() => appFunctionalities.getColor(color), [ color ]);
 
   const handledEditNamePalette = (name: string) => {
     setIsEditNamePalette(name);
@@ -101,7 +99,7 @@ function App() {
     <Layout>
       <section className="pt-24 font-sans">
         <div
-          style={{ "--color": deferredColor + "64" }}
+          style={{ "--color": color + "64" }}
           className="absolute inset-0 bg-gradient-to-b from-[var(--color)] to-white to-25% h-full -z-10"
         />
         <div className="flex flex-col items-center justify-center w-full h-full mx-auto gap-[36px] mb-40">
@@ -120,7 +118,7 @@ function App() {
             Generate Random
             <Shuffle />
           </Button>
-          <GraphicItems color={deferredColor} />
+          <GraphicItems color={color} />
         </div>
       </section>
       <section className="flex gap-[32px] min-h-screen">
