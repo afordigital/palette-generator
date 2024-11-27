@@ -34,47 +34,9 @@ import {
   TooltipTrigger,
 } from "@radix-ui/react-tooltip";
 import { Footer } from "./components/Footer";
-import ApiKeyDialog from "@components/ApiKeyDialog";
 import PromptDialog from "@components/PromptDialog";
-import geminiStore from "@utils/gemini-store";
-
-class AppFunctionalities {
-  public getColor(deferredColor:string){
-    const scaleColors: string[] = [ "#FFFFFF", deferredColor, "#000000" ];
-
-    return chroma
-    .scale(scaleColors)
-    .colors(11)
-    .slice(1, 10)
-    .map((color) => ({
-      color,
-      text: chroma.contrast(color, "#191919") > 4.5 ? "#191919" : "#FEFDFC",
-    }));
-  }
-}
-
-const appFunctionalities: AppFunctionalities = new AppFunctionalities();
-
-class AppFunctionalities {
-  public getColor(deferredColor:string){
-    const scaleColors: string[] = [ "#FFFFFF", deferredColor, "#000000" ];
-
-    return chroma
-    .scale(scaleColors)
-    .colors(11)
-    .slice(1, 10)
-    .map((color) => ({
-      color,
-      text: chroma.contrast(color, "#191919") > 4.5 ? "#191919" : "#FEFDFC",
-    }));
-  }
-}
-
-const appFunctionalities: AppFunctionalities = new AppFunctionalities();
 
 function App() {
-  const provider = useContext(HexadecimalContext);
-
   const [color, setColor] = useState("#ffffff");
   const [colorAux, setColorAux] = useState(color);
   const deferredColor = useDeferredValue(color);
@@ -93,7 +55,6 @@ function App() {
 
   const [, setLocation] = useLocation();
 
-  const [showApiKeyDialog, setShowApiKeyDialog] = useState(false);
   const [showPromptDialog, setShowPromptDialog] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -157,12 +118,7 @@ function App() {
   };
 
   const handleGenerateAI = () => {
-    const apiKey = geminiStore.getApiKey();
-    if (!apiKey) {
-      setShowApiKeyDialog(true);
-    } else {
-      setShowPromptDialog(true);
-    }
+    setShowPromptDialog(true);
   };
 
   const handlePromptSubmit = async (color: string) => {
@@ -228,7 +184,7 @@ function App() {
             <h2 className="pb-6 text-4xl font-bold font-headings">
               Saved Palettes
             </h2>
-            <div className="flex flex-wrap gap-[70px] w-full max-w-full gap-y-8">
+            <div className="flex flex-wrap justify-between w-full max-w-full gap-y-8">
               {Object.entries(savedPalettes).map(([name, palette]) => {
                 return (
                   <div key={name} className="flex flex-col gap-[12px]">
@@ -340,15 +296,6 @@ function App() {
           </div>
         )}
       </section>
-      <ApiKeyDialog
-        open={showApiKeyDialog}
-        onSubmit={(apiKey) => {
-          geminiStore.setApiKey(apiKey);
-          setShowApiKeyDialog(false);
-        }}
-        onCancel={() => setShowApiKeyDialog(false)}
-        setShowPromptDialog={setShowPromptDialog}
-      />
       <PromptDialog
         open={showPromptDialog}
         onSubmit={handlePromptSubmit}
