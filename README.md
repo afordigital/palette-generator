@@ -2,7 +2,6 @@
 _Effortlessly create stunning color palettes for your UX/UI projects._  
 
 ![Desktop Image](https://i.imgur.com/omXHxoO.png)  
-![iPhone Image](https://i.imgur.com/gqxpYwT.png)  
 
 ---
 
@@ -65,4 +64,40 @@ VITE v5.4.11  ready in 438 ms
 
 Open your browser and navigate to the provided URL (http://localhost:5173/) to access the application.
 
+## Contributing
 
+We welcome contributions to enhance the Palette Generator. Follow these steps to get started:
+
+1. Fork the repository.
+2. Create a feature branch:
+   ```bash
+   git checkout -b feature-name
+```
+3. Commit your changes:
+```bash
+git commit -m "Add feature-name"
+``
+4. Push to the branch:
+```bash
+git push origin feature-name
+```
+5. Create a Pull Request
+
+## Recommended Extensions
+
+For an improved development experience in Visual Studio Code, consider installing the following extensions:
+- [ES7+ React/Redux/React-Native snippets](https://marketplace.visualstudio.com/items?itemName=dsznajder.es7-react-js-snippets)
+- [Simple React Snippets](https://marketplace.visualstudio.com/items?itemName=burkeholland.simple-react-snippets)
+- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+- [Error Lens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens)
+- [Bracket Pair Color DLW](https://marketplace.visualstudio.com/items?itemName=BracketPairColorDLW.bracket-pair-color-dlw)
+- [Auto Rename Tag](https://marketplace.visualstudio.com/items?itemName=formulahendry.auto-rename-tag)
+- [Auto Close Tag](https://marketplace.visualstudio.com/items?itemName=formulahendry.auto-close-tag)
+- [GitLens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)
+- [Auto Import](https://marketplace.visualstudio.com/items?itemName=steoates.autoimport)
+- [Auto Complete Tag](https://marketplace.visualstudio.com/items?itemName=formulahendry.auto-complete-tag)
+
+## License
+
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).  
+See the [LICENSE](./LICENSE) file for details.
