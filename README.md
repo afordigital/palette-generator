@@ -1,5 +1,3 @@
-![app icon](public/windows/Square150x150Logo.scale-200.png)
-
 # Palette Generator
 
 An intuitive application designed to create stunning color palettes, tailored for UX/UI designers to enhance their projects with ease and precision.
