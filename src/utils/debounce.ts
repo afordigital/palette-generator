@@ -6,11 +6,10 @@ interface debounceParams {
 let timeout: ReturnType<typeof setTimeout> | null = null;
 
 export function debounce({ callback, delay }: debounceParams): void {
-
     if (timeout) clearTimeout(timeout);
 
     timeout = setTimeout(() => {
         callback(); 
-    }, delay);
+    }, delay ?? 100);
 }
 
