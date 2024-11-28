@@ -184,10 +184,10 @@ function App() {
             <h2 className="pb-6 text-4xl font-bold font-headings">
               Saved Palettes
             </h2>
-            <div className="flex flex-wrap justify-between w-full max-w-full gap-y-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 w-full max-w-full gap-8">
               {Object.entries(savedPalettes).map(([name, palette]) => {
                 return (
-                  <div key={name} className="flex flex-col gap-[12px]">
+                  <div key={name} className="flex flex-col max-w-[350px] gap-[12px]">
                     <div className="flex justify-between ">
                       {isEditNamePalette !== "" &&
                       isEditNamePalette === name ? (
