@@ -1,11 +1,11 @@
 import { Edit } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "../shared/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "./ui/tooltip";
+} from "../shared/ui/tooltip";
 
 export const EditPaletteName = () => {
   return (

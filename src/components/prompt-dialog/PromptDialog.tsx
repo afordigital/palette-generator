@@ -7,8 +7,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "./ui/alert-dialog";
-import { Button } from "./ui/button";
+} from "../shared/ui/alert-dialog";
+import { Button } from "../shared/ui/button";
 import { generateAIColor } from "@utils/ai-color-generator";
 import { Loader2 } from "lucide-react";
 

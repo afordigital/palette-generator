@@ -1,4 +1,4 @@
-import { Button } from "@components/ui/button.tsx";
+import { Button } from "@/components/shared/ui/button";
 import { tailwindGenerator } from "@lib/tailwindGenerator.ts";
 import { clipboard } from "@utils/clipboard.ts";
 import { Copy } from "lucide-react";
@@ -8,7 +8,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "./ui/tooltip";
+} from "../shared/ui/tooltip";
 
 interface CopyPaletteProps {
   colors: { color: string; text: string }[];

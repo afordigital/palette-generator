@@ -3,14 +3,13 @@ interface debounceParams {
     delay?: number;
 }
 
-export function debounce({ callback, delay }: debounceParams): void {
-    let timeout: ReturnType<typeof setTimeout> | null = null;
+let timeout: ReturnType<typeof setTimeout> | null = null;
 
-    if (!timeout) clearTimeout(timeout!);
+export function debounce({ callback, delay }: debounceParams): void {
+    if (timeout) clearTimeout(timeout);
 
     timeout = setTimeout(() => {
-        // callback is if you want to pass a functionality to execute
-        callback!();
+        callback(); 
     }, delay ?? 100);
 }
 
