@@ -3,12 +3,12 @@ import { createContext } from "react";
 export interface IValuesProvider {
     hexColor:string;
     rgbColor: string;
-    setHexColor: (hex:string) => void;
+    setHexColor: (hex: string, useDebounce?: boolean) => void;
 }
 
 const defaultValues:IValuesProvider = {
-    hexColor: '#aabbcc',
-    rgbColor: "",
+    hexColor: '',
+    rgbColor: '',
     setHexColor: () => {}
 };
 
