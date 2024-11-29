@@ -22,7 +22,7 @@ class ProviderHandlers {
 
 const providerHandler: ProviderHandlers = new ProviderHandlers();
 
-function HexadecimalProvider({children}: IHexadecimalProviderProps) {
+function HexadecimalProvider({ children }: IHexadecimalProviderProps) {
     const [ hexColor, setHexColor ] = useState<string>("");
 
     const deferredColor = useDeferredValue(hexColor);
@@ -36,7 +36,7 @@ function HexadecimalProvider({children}: IHexadecimalProviderProps) {
         rgbColor: "",
         setHexColor: (hex:string, useDebounce?: boolean) => {
             return useDebounce ? 
-            debounce({callback: () => setHexColor(hex)}) :
+            debounce({ callback: () => setHexColor(hex) }) :
             setHexColor(hex);
         }
     };

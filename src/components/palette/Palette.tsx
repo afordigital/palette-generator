@@ -18,7 +18,7 @@ type PaletteProps = {
 };
 
 export const Palette = ({ colors }: PaletteProps) => {
-  const [lastColorCopied, setLastColorCopied] = useState("");
+  const [ lastColorCopied, setLastColorCopied ] = useState("");
 
   return (
     <TooltipProvider>

@@ -14,73 +14,73 @@ interface Store {
   getSnapshot: () => Palettes
 }
 
-let palettes: Palettes = JSON.parse(localStorage.getItem('palettes')!) || {};
+let palettes: Palettes = JSON.parse(localStorage.getItem('palettes')!) || {} ;
 
 type Listener = () => void;
 type Unsubscribe = () => void;
 
-let listeners: Listener[] = [];
+let listeners: Listener[] = [] ;
 
 function emit() {
   for (const listener of listeners) {
-    listener();
+    listener() ;
   }
 }
  
 class PalettesStore implements Store {  
   public add(name: string, palette: Palette):void{
-    palettes = { ...palettes, [name]: palette };
-    emit();
-    localStorage.setItem('palettes', JSON.stringify(palettes));
+    palettes = { ...palettes, [name]: palette } ;
+    emit() ;
+    localStorage.setItem('palettes', JSON.stringify(palettes)) ;
   };
 
   public rem(name: string): void{
     palettes = Object.keys(palettes).reduce((acc, key) => {
-      if (key !== name) acc[key] = palettes[key];
-      return acc;
-    }, {} as Palettes);
-    emit();
-    localStorage.setItem('palettes', JSON.stringify(palettes));
+      if (key !== name) acc[key] = palettes[key] ;
+      return acc ;
+    }, {} as Palettes) ;
+    emit() ;
+    localStorage.setItem('palettes', JSON.stringify(palettes)) ;
   };
 
   private getName(key: string, oldName: string, acc: Palettes, newName: string): Palettes {
       if (key === oldName) {
-        acc[newName] = palettes[key];
+        acc[newName] = palettes[key] ;
       } else {
-        acc[key] = palettes[key];
+        acc[key] = palettes[key] ;
       }
-      return acc;
+      return acc ;
   }
 
   public updatePaletteName(oldName: string, newName: string): string {
-    newName = newName.trim();
+    newName = newName.trim() ;
     // Verify errors
-    if (palettes[newName]) return `The name "${newName}" already exists! 🐭`;
-    if (newName === '') return 'The name cannot be empty! 🐭';
+    if (palettes[newName]) return `The name "${newName}" already exists! 🐭` ;
+    if (newName === '') return 'The name cannot be empty! 🐭' ;
     // Update the name of the palette
     if (palettes[oldName]) {
       const updatedPalettes = Object.keys(palettes) 
-      .reduce((acc, key) => this.getName(key, oldName, acc, newName), {} as Palettes);
+      .reduce((acc, key) => this.getName(key, oldName, acc, newName), {} as Palettes) ;
 
-      palettes = updatedPalettes;
+      palettes = updatedPalettes ;
 
-      emit();
-      localStorage.setItem('palettes', JSON.stringify(palettes));
+      emit() ;
+      localStorage.setItem('palettes', JSON.stringify(palettes)) ;
     }
-    return '';
+    return '' ;
   };
 
   public subscribe(listener: Listener): Unsubscribe{
-    listeners.push(listener);
+    listeners.push(listener) ;
 
-    return () => {listeners = listeners.filter(l => l !== listener);};
+    return () => {listeners = listeners.filter(l => l !== listener) ;} ;
   };
 
   public getSnapshot(): Palettes {
-    return palettes;
+    return palettes ;
   };
 }
 
-const store: Store = new PalettesStore();
+const store: Store = new PalettesStore() ;
 
-export default store;
+export default store ;

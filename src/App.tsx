@@ -54,12 +54,12 @@ const controller: AppController = new AppController();
 function App() {
   const provider = useContext(HexadecimalContext);
 
-  const [, setLocation] = useLocation();
+  const [ , setLocation ] = useLocation();
 
-  const [color, setColor] = useState("#ffffff");
+  const [ color, setColor ] = useState("#ffffff");
 
-  const [showPromptDialog, setShowPromptDialog] = useState(false);
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [ showPromptDialog, setShowPromptDialog ] = useState(false);
+  const [ isGenerating, setIsGenerating ] = useState(false);
 
   const colors = useMemo(() => controller.getColor(color), [ color ]);
 
@@ -77,11 +77,7 @@ function App() {
     setIsGenerating(false);
     setShowPromptDialog(false);
     
-    if (ValidateHexadecimal(color)) {
-      setColor(provider.hexColor);
-
-      setLocation("?color=%23" + provider.hexColor.slice(1, 8));
-    }
+    if (ValidateHexadecimal(color)) setColor(provider.hexColor);
   };
 
   return (

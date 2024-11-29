@@ -9,6 +9,7 @@
     "dev": "vite --host 0.0.0.0",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "lint:resolve": "eslint --fix",
     "preview": "vite preview",
     "generate-pwa-assets": "pwa-asset-generator --preset minimal public/favicon.ico"
   },

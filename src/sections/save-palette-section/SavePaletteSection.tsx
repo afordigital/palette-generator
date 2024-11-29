@@ -36,7 +36,7 @@ const NamePalette = (props: IEditPaletteNameProps) => {
     };
 
 
-    return(
+    return (
         <label
             className={
                 `flex rounded-[4px] border-2 w-60 
@@ -60,7 +60,7 @@ const NamePalette = (props: IEditPaletteNameProps) => {
 class SavePaletteSectionController {
     public copyPaletteColors(palette:Palette){
         return Object.entries(palette).map(
-            ([, color]) => ({
+            ([ , color ]) => ({
                 color,
                 text:
                 chroma.contrast(color, "#191919") > 4.5
@@ -71,7 +71,7 @@ class SavePaletteSectionController {
     }
 
     public littlePaletteColors(palette: Palette){
-        return Object.entries(palette).map(([, color]) => ({
+        return Object.entries(palette).map(([ , color ]) => ({
             color,
             text:
             chroma.contrast(color, "#191919") > 4.5
@@ -86,8 +86,8 @@ const controller: SavePaletteSectionController = new SavePaletteSectionControlle
 const SavePaletteSection = () => {
     const provider = useContext(HexadecimalContext);
 
-    const [isEditNamePalette, setIsEditNamePalette] = useState("");
-    const [valueEditNamePalette, setValueEditNamePalette] = useState("");
+    const [ isEditNamePalette, setIsEditNamePalette ] = useState("");
+    const [ valueEditNamePalette, setValueEditNamePalette ] = useState("");
 
     const handledEditNamePalette = (name: string) => {
         setIsEditNamePalette(name);
@@ -107,7 +107,7 @@ const SavePaletteSection = () => {
                     Saved Palettes
                 </h2>
                 <div className="flex flex-wrap justify-between w-full max-w-full gap-y-8">
-                {Object.entries(savedPalettes).map(([name, palette]) => {
+                {Object.entries(savedPalettes).map(([ name, palette ]) => {
                     return (
                     <div key={name} className="flex flex-col gap-[12px]">
                         <div className="flex justify-between ">

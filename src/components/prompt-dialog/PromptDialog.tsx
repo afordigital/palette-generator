@@ -21,7 +21,7 @@ interface PromptDialogProps {
 }
 
 export default function PromptDialog({ open, onSubmit, onCancel, isLoading, setIsLoading }: PromptDialogProps) {
-  const [prompt, setPrompt] = React.useState(
+  const [ prompt, setPrompt ] = React.useState(
     "Generate a color that would work well for a modern software application, considering contrast ratios, accessibility, and current UI/UX trends."
   );
 
