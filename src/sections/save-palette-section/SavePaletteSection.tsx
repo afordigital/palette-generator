@@ -22,11 +22,11 @@ const NamePalette = (props: IEditPaletteNameProps) => {
     const handlerOnKeydown = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
             const isError = store.updatePaletteName(
-            props.name,
-            props.valueEditNamePalette
+                props.name,
+                props.valueEditNamePalette
             );
-            if (isError !== "") {
-            toast.error(isError);
+                if (isError !== "") {
+                toast.error(isError);
             }
             props.setIsEditNamePalette("");
         } else if (e.key === "Escape") {
@@ -104,7 +104,7 @@ const SavePaletteSection = () => {
             {savedPalettes && Object.keys(savedPalettes).length > 0 && (
             <div className="flex flex-col w-full gap-4">
                 <h2 className="pb-6 text-4xl font-bold font-headings">
-                Saved Palettes
+                    Saved Palettes
                 </h2>
                 <div className="flex flex-wrap justify-between w-full max-w-full gap-y-8">
                 {Object.entries(savedPalettes).map(([name, palette]) => {

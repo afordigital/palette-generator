@@ -12,6 +12,13 @@ import {
   AlertDialogTitle,
 } from "@/components/shared/ui/alert-dialog";
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../shared/ui/tooltip";
+
 interface DeletePaletteProps {
   name: string;
   action: (name: string) => void;
@@ -55,16 +62,26 @@ export function DeletePalette({ name, action }: DeletePaletteProps) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <Button
-        variant="outline"
-        size={"sm"}
-        onClick={() => {
-          setShowAlertDialog(true);
-        }}
-        className="ml-2 rounded-[4px] text-red-500"
-      >
-        <Trash2Icon></Trash2Icon>
-      </Button>
+
+      <TooltipProvider>
+        <Tooltip delayDuration={200}>
+          <TooltipTrigger>
+            <Button
+              variant="outline"
+              size={"sm"}
+              onClick={() => {
+                setShowAlertDialog(true);
+              }}
+              className="ml-2 rounded-[4px] text-red-500"
+            >
+              <Trash2Icon></Trash2Icon>
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent className="rounded-[4px] ">
+            <p className="text-[12px]">Delete palette</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     </>
   );
 }
