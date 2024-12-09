@@ -1,25 +1,37 @@
+import { Env } from "@/constants/env";
+
+interface IGeminiAPI {
+  getApiKey: () => string;
+  setApiKey: (key: string) => void;
+  subscribe: (listener: Listener) => () => void;
+}
+
 type Listener = () => void;
 
-let apiKey: string | null = import.meta.env.VITE_GEMINI_API_KEY ?? null;
+let apiKey: string = Env.VITE_GEMINI_API_KEY;
 let listeners: Listener[] = [];
 
 function emit() {
   listeners.forEach((listener) => listener());
 }
+ class GeminiAPI implements IGeminiAPI {
+  public getApiKey(): string {
+    return apiKey;
+  };
 
-const geminiStore = {
-  getApiKey: () => apiKey,
-  setApiKey: (key: string) => {
+  public setApiKey(key: string): void { 
     apiKey = key;
     localStorage.setItem("gemini_api_key", key);
     emit();
-  },
-  subscribe: (listener: Listener) => {
+  };
+
+  public subscribe(listener: Listener): () => void {
     listeners.push(listener);
     return () => {
       listeners = listeners.filter((l) => l !== listener);
     };
-  },
-};
+  };
 
-export default geminiStore;
+}
+
+export default new GeminiAPI();

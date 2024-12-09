@@ -3,7 +3,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@components/ui/tooltip";
+} from "@/components/shared/ui/tooltip";
 import { clipboard } from "@utils/clipboard";
 import { memo, useState } from "react";
 import { toast } from "sonner";
@@ -18,7 +18,7 @@ type PaletteProps = {
 };
 
 export const Palette = ({ colors }: PaletteProps) => {
-  const [lastColorCopied, setLastColorCopied] = useState("");
+  const [ lastColorCopied, setLastColorCopied ] = useState("");
 
   return (
     <TooltipProvider>

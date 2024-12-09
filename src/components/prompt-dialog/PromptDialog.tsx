@@ -7,8 +7,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "./ui/alert-dialog";
-import { Button } from "./ui/button";
+} from "../shared/ui/alert-dialog";
+import { Button } from "../shared/ui/button";
 import { generateAIColor } from "@utils/ai-color-generator";
 import { Loader2 } from "lucide-react";
 
@@ -21,21 +21,17 @@ interface PromptDialogProps {
 }
 
 export default function PromptDialog({ open, onSubmit, onCancel, isLoading, setIsLoading }: PromptDialogProps) {
-  const [prompt, setPrompt] = React.useState(
+  const [ prompt, setPrompt ] = React.useState(
     "Generate a color that would work well for a modern software application, considering contrast ratios, accessibility, and current UI/UX trends."
   );
 
     const handleSubmit = async () => {
-        setIsLoading(true);
-    await generateAIColor({
-      prompt,
-      onSuccess: (color) => {
-        onSubmit(color);
-      },
-      onError: () => {
-        onCancel();
-      },
-      onKeyRequired: onCancel
+      setIsLoading(true);
+      await generateAIColor({
+        prompt,
+        onSuccess: (color) => onSubmit(color),
+        onError: () => onCancel(),
+        onKeyRequired: onCancel
     });
   };
 
@@ -69,7 +65,7 @@ export default function PromptDialog({ open, onSubmit, onCancel, isLoading, setI
           >
             {isLoading ? (
               <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                <Loader2 aria-label="loader" className="w-4 h-4 mr-2 animate-spin" />
                 Generating...
               </>
             ) : (

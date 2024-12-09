@@ -1,4 +1,4 @@
-import { Button } from "@components/ui/button.tsx";
+import { Button } from "@/components/shared/ui/button";
 import { Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -10,14 +10,13 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@components/ui/alert-dialog";
+} from "@/components/shared/ui/alert-dialog";
 
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./ui/tooltip";
+  TooltipProvider
+} from "../shared/ui/tooltip";
 
 interface DeletePaletteProps {
   name: string;
@@ -25,7 +24,7 @@ interface DeletePaletteProps {
 }
 
 export function DeletePalette({ name, action }: DeletePaletteProps) {
-  const [showAlertDialog, setShowAlertDialog] = useState(false);
+  const [ showAlertDialog, setShowAlertDialog ] = useState(false);
 
   const deletePalette = () => {
     action(name);
@@ -45,6 +44,7 @@ export function DeletePalette({ name, action }: DeletePaletteProps) {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel
+              aria-label="cancel delete"
               className="rounded-[4px]"
               onClick={() => {
                 setShowAlertDialog(false);
@@ -53,6 +53,7 @@ export function DeletePalette({ name, action }: DeletePaletteProps) {
               Cancel
             </AlertDialogCancel>
             <Button
+              aria-label="confirm delete"
               variant="destructive"
               className="rounded-[4px]"
               onClick={deletePalette}
@@ -65,8 +66,8 @@ export function DeletePalette({ name, action }: DeletePaletteProps) {
 
       <TooltipProvider>
         <Tooltip delayDuration={200}>
-          <TooltipTrigger>
             <Button
+              aria-label="delete button"
               variant="outline"
               size={"sm"}
               onClick={() => {
@@ -74,9 +75,8 @@ export function DeletePalette({ name, action }: DeletePaletteProps) {
               }}
               className="ml-2 rounded-[4px] text-red-500"
             >
-              <Trash2Icon></Trash2Icon>
+              <Trash2Icon />
             </Button>
-          </TooltipTrigger>
           <TooltipContent className="rounded-[4px] ">
             <p className="text-[12px]">Delete palette</p>
           </TooltipContent>
