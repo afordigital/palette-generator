@@ -1,3 +1,4 @@
+import { Env } from "@/constants/env";
 import geminiStore from "./gemini-store";
 import { toast } from "sonner";
 
@@ -23,7 +24,7 @@ export async function generateAIColor({
 
   try {
     const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent",
+      Env.VITE_GEMINI_URL,
       {
         method: "POST",
         headers: {
@@ -58,6 +59,7 @@ export async function generateAIColor({
     }
 
     const data = await response.json();
+
     const generatedColor = data.candidates[0].content.parts[0].text.trim();
 
     // Extraer solo el código hex si viene con texto adicional
@@ -83,3 +85,4 @@ export async function generateAIColor({
     toast.error("Failed to generate AI palette");
   }
 }
+

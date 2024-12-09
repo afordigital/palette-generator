@@ -3,6 +3,7 @@ import globals from 'globals';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
+import testingLibrary from 'eslint-plugin-testing-library';
 
 export default tseslint.config(
   { ignores: [ 'dist', 'node_module' ] },
@@ -16,6 +17,7 @@ export default tseslint.config(
     plugins: {
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
+      'testing-library': testingLibrary
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
@@ -37,9 +39,10 @@ export default tseslint.config(
       'no-console': 'warn',         // <-- no recommended to use console.log() function
       'no-alert': 'error',          // <-- no allowed to use alert() function
       'max-params': [ 'warn', { max: 4 } ], // <--- recommend to use minus of 4 params
-      'max-nested-callbacks': [ 'error', { max: 2 } ], // <-- no allowed to use more of two functions nested example function(){function(){}}
+      'max-nested-callbacks': [ 'error', { max: 4 } ], // <-- no allowed to use more of two functions nested example function(){function(){}}
       'max-depth': [ 'error', { max: 3 } ], // <-- https://eslint.org/docs/latest/rules/max-depth
-      'react-refresh/only-export-components': 'off' // <-- by default eslint has activated this rule
+      'react-refresh/only-export-components': 'off', // <-- by default eslint has activated this rule
+      'no-debugger': "off"
     },
   },
 );

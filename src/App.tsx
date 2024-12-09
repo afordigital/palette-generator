@@ -8,15 +8,14 @@ import {
 } from "react";
 
 import { Button } from "@/components/shared/ui/button";
-import { getRandomColor } from "@utils/getRandomColor";
 import { SavePalette } from "@/components/save-palette/SavePalette";
 import { Shuffle } from "lucide-react";
 import { Toaster } from "@/components/shared/ui/sonner";
 import { useLocation } from "wouter";
 import { ValidateHexadecimal } from "./utils/hexadecimal-validator";
 import { HexadecimalContext } from "./provider/hexadecimal/hexadecimal.context";
+import { Footer } from "./sections/footer/Footer";
 
-import chroma from "chroma-js";
 import GraphicItems from "@components/graphic-items/GraphicItems";
 import Layout from "./layouts/Layout";
 import Palette from "@/components/palette/Palette";
@@ -24,30 +23,8 @@ import store from "@utils/palettes";
 import ColorPicker from "./components/color-picker/ColorPicker";
 import SavePaletteSection from "./sections/save-palette-section/SavePaletteSection";
 import PromptDialog from "./components/prompt-dialog/PromptDialog";
-import { Footer } from "./sections/footer/Footer";
+import AppController from "./app.controller";
 
-class AppController {
-  public getColor(deferredColor:string){
-    const scaleColors: string[] = [ "#FFFFFF", deferredColor, "#000000" ];
-
-    return chroma
-    .scale(scaleColors)
-    .colors(11)
-    .slice(1, 10)
-    .map((color) => ({
-      color,
-      text: chroma.contrast(color, "#191919") > 4.5 ? "#191919" : "#FEFDFC",
-    }));
-  }
-
-  public getRandom(): string | undefined {
-    const hexadecimalRandom: string = getRandomColor();
-
-    if (!ValidateHexadecimal(hexadecimalRandom)) return;
-
-    return hexadecimalRandom;
-  }
-}
 
 const controller: AppController = new AppController();
 

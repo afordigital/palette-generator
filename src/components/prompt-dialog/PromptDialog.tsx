@@ -26,16 +26,12 @@ export default function PromptDialog({ open, onSubmit, onCancel, isLoading, setI
   );
 
     const handleSubmit = async () => {
-        setIsLoading(true);
-    await generateAIColor({
-      prompt,
-      onSuccess: (color) => {
-        onSubmit(color);
-      },
-      onError: () => {
-        onCancel();
-      },
-      onKeyRequired: onCancel
+      setIsLoading(true);
+      await generateAIColor({
+        prompt,
+        onSuccess: (color) => onSubmit(color),
+        onError: () => onCancel(),
+        onKeyRequired: onCancel
     });
   };
 
@@ -69,7 +65,7 @@ export default function PromptDialog({ open, onSubmit, onCancel, isLoading, setI
           >
             {isLoading ? (
               <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                <Loader2 aria-label="loader" className="w-4 h-4 mr-2 animate-spin" />
                 Generating...
               </>
             ) : (

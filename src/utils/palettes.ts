@@ -29,7 +29,7 @@ function emit() {
  
 class PalettesStore implements Store {  
   public add(name: string, palette: Palette):void{
-    palettes = { ...palettes, [name]: palette } ;
+    palettes = { ...palettes, [name]: palette };
     emit() ;
     localStorage.setItem('palettes', JSON.stringify(palettes)) ;
   };
@@ -57,6 +57,7 @@ class PalettesStore implements Store {
     // Verify errors
     if (palettes[newName]) return `The name "${newName}" already exists! 🐭` ;
     if (newName === '') return 'The name cannot be empty! 🐭' ;
+
     // Update the name of the palette
     if (palettes[oldName]) {
       const updatedPalettes = Object.keys(palettes) 
@@ -67,6 +68,7 @@ class PalettesStore implements Store {
       emit() ;
       localStorage.setItem('palettes', JSON.stringify(palettes)) ;
     }
+    
     return '' ;
   };
 
@@ -77,8 +79,8 @@ class PalettesStore implements Store {
   };
 
   public getSnapshot(): Palettes {
-    return palettes ;
-  };
+    return palettes;
+  }
 }
 
 const store: Store = new PalettesStore() ;

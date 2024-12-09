@@ -15,7 +15,7 @@ export function SavePalette({ colors, action }: SavePaletteProps) {
     <Button
       onClick={() => {
         tailwindGenerator(colors).then(([ name, palette ]) => {
-          action(name, palette);
+          action(name.toString(), palette);
           toast(`Palette saved correctly! 🐭`);
         });
       }}

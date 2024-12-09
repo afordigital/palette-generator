@@ -11,7 +11,9 @@
     "lint": "eslint .",
     "lint:resolve": "eslint --fix",
     "preview": "vite preview",
-    "generate-pwa-assets": "pwa-asset-generator --preset minimal public/favicon.ico"
+    "test": "vitest",
+    "test:coverage": "vitest --coverage",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.2",
@@ -36,22 +38,32 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.0.1",
+    "@testing-library/user-event": "^14.5.2",
     "@types/chroma-js": "^2.4.4",
     "@types/node": "^22.9.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react-swc": "^3.5.0",
+    "@vitest/browser": "^2.1.8",
+    "@vitest/coverage-v8": "2.1.6",
+    "@vitest/ui": "^2.1.6",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.13.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.14",
+    "eslint-plugin-testing-library": "^7.0.0",
     "globals": "^15.11.0",
+    "jsdom": "^25.0.1",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.11.0",
     "vite": "^5.4.10",
     "vite-plugin-pwa": "^0.21.0",
+    "vitest": "^2.1.6",
     "workbox-window": "^7.3.0"
   }
 }
