@@ -10,6 +10,15 @@ import {
   useSyncExternalStore,
 } from "react";
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@radix-ui/react-tooltip";
+import { Footer } from "./components/Footer";
+import PromptDialog from "@components/PromptDialog";
+
 import { Button } from "@components/ui/button";
 import { CopyPalette } from "@components/CopyPalette.tsx";
 import { DeletePalette } from "@components/DeletePalette.tsx";
@@ -26,6 +35,7 @@ import Palette from "@components/Palette";
 import store, { type Palettes } from "@utils/palettes";
 import LittlePalette from "./components/LittlePalette";
 import { EditPaletteName } from "./components/EditPaletteName";
+
 import { ValidateHexadecimal } from "./utils/hexadecimal-validator";
 import { HexadecimalContext } from "./provider/hexadecimal/hexadecimal.context";
 import ColorPicker from "./components/ColorPicker";
@@ -47,13 +57,11 @@ class AppFunctionalities {
 
 const appFunctionalities: AppFunctionalities = new AppFunctionalities();
 
-function App() {
+function App() {  
   const provider = useContext(HexadecimalContext);
   const [, setLocation] = useLocation();
-
   const [color, setColor] = useState("#ffffff");
   
-
   const [isEditNamePalette, setIsEditNamePalette] = useState("");
   const [valueEditNamePalette, setValueEditNamePalette] = useState("");
 
@@ -70,6 +78,24 @@ function App() {
     store.subscribe,
     store.getSnapshot
   );
+
+  const [, setLocation] = useLocation();
+
+  const [showPromptDialog, setShowPromptDialog] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const colors = useMemo(() => {
+    return chroma
+      .scale(["#FFFFFF", deferredColor, "#000000"])
+      .colors(11)
+      .slice(1, 10)
+      .map((color) => {
+        return {
+          color,
+          text: chroma.contrast(color, "#191919") > 4.5 ? "#191919" : "#FEFDFC",
+        };
+      });
+  }, [deferredColor, colorAux]);
 
   const isValid = useCallback((newColor: string) => {
     const regex = /^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/;
@@ -97,14 +123,24 @@ function App() {
     isValid(newColor);
   };
 
+  const handleGenerateAI = () => {
+    setShowPromptDialog(true);
+  };
+
+  const handlePromptSubmit = async (color: string) => {
+    setIsGenerating(false);
+    setShowPromptDialog(false);
+    isValid(color);
+  };
+
   return (
     <Layout>
       <section className="pt-24 font-sans">
         <div
           style={{ "--color": deferredColor + "64" }}
-          className="absolute inset-0 bg-gradient-to-b from-[var(--color)] to-white to-25% h-full -z-10"
+          className="absolute inset-0 bg-gradient-to-b from-[var(--color)] to-white to-25% -z-10"
         />
-        <div className="flex flex-col items-center justify-center w-full h-full mx-auto gap-[36px] mb-40">
+        <div className="flex flex-col items-center justify-center w-full mx-auto gap-[36px] mb-10">
           <h1 className="text-3xl font-bold font-headings lg:text-6xl">
             Generate your Custom Palette
           </h1>
@@ -112,27 +148,36 @@ function App() {
           <ColorPicker />
           <SavePalette colors={colors} action={store.add}></SavePalette>
           <Palette colors={colors} variant="Primary" />
-          <Button
-            onClick={handleGenerateRandom}
-            variant={"secondary"}
-            className="rounded-[4px]"
-          >
-            Generate Random
-            <Shuffle />
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              onClick={handleGenerateRandom}
+              variant={"secondary"}
+              className="rounded-[4px]"
+            >
+              Generate Random
+              <Shuffle className="ml-2" />
+            </Button>
+            <Button
+              onClick={handleGenerateAI}
+              variant={"secondary"}
+              className="rounded-[4px]"
+            >
+              Generate with AI
+            </Button>
+          </div>
           <GraphicItems color={deferredColor} />
         </div>
       </section>
-      <section className="flex gap-[32px] min-h-screen">
+      <section className="flex gap-[32px]">
         {savedPalettes && Object.keys(savedPalettes).length > 0 && (
           <div className="flex flex-col w-full gap-4">
             <h2 className="pb-6 text-4xl font-bold font-headings">
               Saved Palettes
             </h2>
-            <div className="flex flex-wrap justify-between w-full max-w-full gap-y-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 w-full max-w-full gap-8">
               {Object.entries(savedPalettes).map(([name, palette]) => {
                 return (
-                  <div key={name} className="flex flex-col gap-[12px]">
+                  <div key={name} className="flex flex-col max-w-[350px] gap-[12px]">
                     <div className="flex justify-between ">
                       {isEditNamePalette !== "" &&
                       isEditNamePalette === name ? (
@@ -171,17 +216,28 @@ function App() {
                           />
                         </label>
                       ) : (
-                        <h4
-                          className="w-full font-semibold cursor-pointer text-md"
-                          onClick={() => {
-                            setColor(palette[500]);
-                          }}
-                          onDoubleClick={() => {
-                            handledEditNamePalette(name);
-                          }}
-                        >
-                          {name.replaceAll("-", " ")}
-                        </h4>
+                        <TooltipProvider>
+                          <Tooltip delayDuration={200}>
+                            <TooltipTrigger>
+                              <h4
+                                className="w-full font-semibold cursor-pointer text-slate-700 hover:text-slate-900 text-md"
+                                onClick={() => {
+                                  setColor(palette[500]);
+                                }}
+                                onDoubleClick={() => {
+                                  handledEditNamePalette(name);
+                                }}
+                              >
+                                {name.replaceAll("-", " ")}
+                              </h4>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p className="px-2 py-1 text-[12px] text-white rounded-[4px] bg-slate-800">
+                                Select palette
+                              </p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
                       )}
                       {!(
                         isEditNamePalette !== "" && isEditNamePalette === name
@@ -230,6 +286,17 @@ function App() {
           </div>
         )}
       </section>
+      <PromptDialog
+        open={showPromptDialog}
+        onSubmit={handlePromptSubmit}
+        onCancel={() => {
+          setShowPromptDialog(false);
+          setIsGenerating(false);
+        }}
+        isLoading={isGenerating}
+        setIsLoading={setIsGenerating}
+      />
+      <Footer />
     </Layout>
   );
 }
