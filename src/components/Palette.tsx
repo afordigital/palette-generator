@@ -17,36 +17,12 @@ type PaletteProps = {
   position?: "start" | "center" | "end";
 };
 
-export const Palette = ({
-  colors,
-  variant,
-  position = "center",
-}: PaletteProps) => {
+export const Palette = ({ colors }: PaletteProps) => {
   const [lastColorCopied, setLastColorCopied] = useState("");
-
-  let contentPosition;
-  switch (position) {
-    case "start":
-      contentPosition = "place-content-start";
-      break;
-    case "end":
-      contentPosition = "place-content-end";
-      break;
-    case "center":
-    default:
-      contentPosition = "place-content-center";
-      break;
-  }
 
   return (
     <TooltipProvider>
-      <article
-        className={`grid ${
-          variant === "Primary"
-            ? "grid-cols-[repeat(auto-fit,minmax(0px,100px))]"
-            : "flex flex-row"
-        } ${contentPosition} w-full`}
-      >
+      <article className="grid grid-cols-[repeat(auto-fit,minmax(0px,100px))] place-content-center w-full">
         {colors.map(({ color, text }, index) => {
           return (
             <Tooltip delayDuration={200} key={color + index}>
@@ -58,26 +34,19 @@ export const Palette = ({
                     toast(`Color ${color} copied correctly! 🐭`);
                   }}
                   style={{ backgroundColor: color, color: text }}
-                  className={` ${
-                    variant === "Primary"
-                      ? `w-[100px] h-[100px] ${
-                          index === 0 && "rounded-l-[8px]"
-                        } ${index === 8 && "rounded-r-[8px]"}`
-                      : "w-[48px] h-[48px]"
+                  className={`w-[100px] h-[100px] ${
+                    index === 0 && "rounded-l-[8px]"
+                  } ${
+                    index === 8 && "rounded-r-[8px]"
                   } hover:border-2 hover:border-black`}
                 ></TooltipTrigger>
-                {variant === "Primary" && (
-                  <p className="font-mono text-sm break-all text-slate-600">
-                    {color}
-                  </p>
-                )}
+
+                <p className="font-mono text-sm break-all text-slate-600">
+                  {color}
+                </p>
               </div>
               <TooltipContent>
-                {variant === "Primary" ? (
-                  <p>{lastColorCopied === color ? "Copied!" : "Copy"}</p>
-                ) : (
-                  <p>{color}</p>
-                )}
+                <p>{lastColorCopied === color ? "Copied!" : "Copy"}</p>
               </TooltipContent>
             </Tooltip>
           );
