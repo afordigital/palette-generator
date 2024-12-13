@@ -1,8 +1,8 @@
 import "./App.css";
 
 import {
-  ChangeEvent,
   useCallback,
+  useContext,
   useDeferredValue,
   useEffect,
   useMemo,
@@ -10,9 +10,17 @@ import {
   useSyncExternalStore,
 } from "react";
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@radix-ui/react-tooltip";
+import { Footer } from "./components/Footer";
+import PromptDialog from "@components/PromptDialog";
+
 import { Button } from "@components/ui/button";
 import { CopyPalette } from "@components/CopyPalette.tsx";
-import { debounce } from "@utils/debounce";
 import { DeletePalette } from "@components/DeletePalette.tsx";
 import { getRandomColor } from "@utils/getRandomColor";
 import { SavePalette } from "@components/SavePalette.tsx";
@@ -27,22 +35,40 @@ import Palette from "@components/Palette";
 import store, { type Palettes } from "@utils/palettes";
 import LittlePalette from "./components/LittlePalette";
 import { EditPaletteName } from "./components/EditPaletteName";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@radix-ui/react-tooltip";
-import { Footer } from "./components/Footer";
-import PromptDialog from "@components/PromptDialog";
 
-function App() {
+import { ValidateHexadecimal } from "./utils/hexadecimal-validator";
+import { HexadecimalContext } from "./provider/hexadecimal/hexadecimal.context";
+import ColorPicker from "./components/ColorPicker";
+
+class AppFunctionalities {
+  public getColor(deferredColor:string){
+    const scaleColors: string[] = [ "#FFFFFF", deferredColor, "#000000" ];
+
+    return chroma
+    .scale(scaleColors)
+    .colors(11)
+    .slice(1, 10)
+    .map((color) => ({
+      color,
+      text: chroma.contrast(color, "#191919") > 4.5 ? "#191919" : "#FEFDFC",
+    }));
+  }
+}
+
+const appFunctionalities: AppFunctionalities = new AppFunctionalities();
+
+function App() {  
+  const provider = useContext(HexadecimalContext);
+  const [, setLocation] = useLocation();
   const [color, setColor] = useState("#ffffff");
-  const [colorAux, setColorAux] = useState(color);
-  const deferredColor = useDeferredValue(color);
-
+  
   const [isEditNamePalette, setIsEditNamePalette] = useState("");
   const [valueEditNamePalette, setValueEditNamePalette] = useState("");
+
+  const deferredColor = useDeferredValue(color);
+
+  const colors = useMemo(() => appFunctionalities.getColor(deferredColor), [ deferredColor ]);
+
   const handledEditNamePalette = (name: string) => {
     setIsEditNamePalette(name);
     setValueEditNamePalette(name);
@@ -76,7 +102,6 @@ function App() {
 
     if (regex.test(newColor)) {
       setColor(newColor);
-      setColorAux(newColor);
       setLocation("?color=%23" + newColor.slice(1, 8));
       return true;
     }
@@ -84,33 +109,14 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const search = window.location.search;
-    const queryString = new URLSearchParams(search).get("color");
-    if (!queryString) {
-      handleGenerateRandom();
-    } else {
-      const newColor = queryString;
-      isValid(newColor);
-    }
-  }, []);
+    if (!ValidateHexadecimal(provider.hexColor)) return;
 
-  const handleColorChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      const newColor = event.target.value;
+    // update all the component
+    setColor(provider.hexColor);
 
-      debounce({
-        callback: () => isValid(newColor),
-      });
-    },
-    []
-  );
+    setLocation("?color=%23" + provider.hexColor.slice(1, 8));
+  }, [ provider.hexColor, setLocation ]);
 
-  const handleTextInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const newColor = event.target.value;
-    if (newColor.length > 7) return;
-    setColorAux(newColor);
-    isValid(newColor);
-  };
 
   const handleGenerateRandom = () => {
     const newColor = getRandomColor();
@@ -139,24 +145,8 @@ function App() {
             Generate your Custom Palette
           </h1>
           <Toaster />
-          <div className="flex flex-col items-center gap-2 md:flex-row">
-            <label htmlFor="current-colors" className="relative">
-              <input
-                type="color"
-                value={deferredColor}
-                onChange={handleColorChange}
-                className="absolute left-2 top-[6px]"
-              ></input>
-              <input
-                id="current-color"
-                value={colorAux}
-                onChange={handleTextInputChange}
-                placeholder="#FDA12D"
-                className="py-[6px] pl-16 font-mono border-[1px] border-slate-700 rounded-[4px]"
-              />
-            </label>
-            <SavePalette colors={colors} action={store.add}></SavePalette>
-          </div>
+          <ColorPicker />
+          <SavePalette colors={colors} action={store.add}></SavePalette>
           <Palette colors={colors} variant="Primary" />
           <div className="flex gap-2">
             <Button
