@@ -1,9 +1,8 @@
 import "./App.css";
 
 import {
-  ChangeEvent,
   useCallback,
-  useDeferredValue,
+  useContext,
   useEffect,
   useMemo,
   useState,
@@ -12,7 +11,6 @@ import {
 
 import { Button } from "@components/ui/button";
 import { CopyPalette } from "@components/CopyPalette.tsx";
-import { debounce } from "@utils/debounce";
 import { DeletePalette } from "@components/DeletePalette.tsx";
 import { getRandomColor } from "@utils/getRandomColor";
 import { SavePalette } from "@components/SavePalette.tsx";
@@ -27,6 +25,11 @@ import Palette from "@components/Palette";
 import store, { type Palettes } from "@utils/palettes";
 import LittlePalette from "./components/LittlePalette";
 import { EditPaletteName } from "./components/EditPaletteName";
+
+import { ValidateHexadecimal } from "./utils/hexadecimal-validator";
+import { HexadecimalContext } from "./provider/hexadecimal/hexadecimal.context";
+import ColorPicker from "./components/ColorPicker";
+
 import {
   Tooltip,
   TooltipContent,
@@ -36,13 +39,34 @@ import {
 import { Footer } from "./components/Footer";
 import PromptDialog from "@components/PromptDialog";
 
+class AppFunctionalities {
+  public getColor(deferredColor:string){
+    const scaleColors: string[] = [ "#FFFFFF", deferredColor, "#000000" ];
+
+    return chroma
+    .scale(scaleColors)
+    .colors(11)
+    .slice(1, 10)
+    .map((color) => ({
+      color,
+      text: chroma.contrast(color, "#191919") > 4.5 ? "#191919" : "#FEFDFC",
+    }));
+  }
+}
+
+const appFunctionalities: AppFunctionalities = new AppFunctionalities();
+
 function App() {
+  const provider = useContext(HexadecimalContext);
+
+  const [, setLocation] = useLocation();
   const [color, setColor] = useState("#ffffff");
-  const [colorAux, setColorAux] = useState(color);
-  const deferredColor = useDeferredValue(color);
 
   const [isEditNamePalette, setIsEditNamePalette] = useState("");
   const [valueEditNamePalette, setValueEditNamePalette] = useState("");
+
+  const colors = useMemo(() => appFunctionalities.getColor(color), [ color ]);
+
   const handledEditNamePalette = (name: string) => {
     setIsEditNamePalette(name);
     setValueEditNamePalette(name);
@@ -70,13 +94,12 @@ function App() {
         };
       });
   }, [deferredColor, colorAux]);
-
+    
   const isValid = useCallback((newColor: string) => {
     const regex = /^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/;
 
     if (regex.test(newColor)) {
       setColor(newColor);
-      setColorAux(newColor);
       setLocation("?color=%23" + newColor.slice(1, 8));
       return true;
     }
@@ -84,33 +107,14 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const search = window.location.search;
-    const queryString = new URLSearchParams(search).get("color");
-    if (!queryString) {
-      handleGenerateRandom();
-    } else {
-      const newColor = queryString;
-      isValid(newColor);
-    }
-  }, []);
+    if (!ValidateHexadecimal(provider.hexColor)) return;
 
-  const handleColorChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      const newColor = event.target.value;
+    // update all the component
+    setColor(provider.hexColor);
 
-      debounce({
-        callback: () => isValid(newColor),
-      });
-    },
-    []
-  );
+    setLocation("?color=%23" + provider.hexColor.slice(1, 8));
+  }, [ provider.hexColor, setLocation ]);
 
-  const handleTextInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const newColor = event.target.value;
-    if (newColor.length > 7) return;
-    setColorAux(newColor);
-    isValid(newColor);
-  };
 
   const handleGenerateRandom = () => {
     const newColor = getRandomColor();
@@ -131,6 +135,8 @@ function App() {
     <Layout>
       <section className="pt-24 font-sans">
         <div
+          style={{ "--color": color + "64" }}
+          className="absolute inset-0 bg-gradient-to-b from-[var(--color)] to-white to-25% h-full -z-10"
           style={{ "--color": deferredColor + "64" }}
           className="absolute inset-0 bg-gradient-to-b from-[var(--color)] to-white to-25% -z-10"
         />
@@ -139,25 +145,19 @@ function App() {
             Generate your Custom Palette
           </h1>
           <Toaster />
-          <div className="flex flex-col items-center gap-2 md:flex-row">
-            <label htmlFor="current-colors" className="relative">
-              <input
-                type="color"
-                value={deferredColor}
-                onChange={handleColorChange}
-                className="absolute left-2 top-[6px]"
-              ></input>
-              <input
-                id="current-color"
-                value={colorAux}
-                onChange={handleTextInputChange}
-                placeholder="#FDA12D"
-                className="py-[6px] pl-16 font-mono border-[1px] border-slate-700 rounded-[4px]"
-              />
-            </label>
-            <SavePalette colors={colors} action={store.add}></SavePalette>
-          </div>
+          <ColorPicker />
+          <SavePalette colors={colors} action={store.add}></SavePalette>
           <Palette colors={colors} variant="Primary" />
+          <Button
+            onClick={handleGenerateRandom}
+            variant={"secondary"}
+            className="rounded-[4px]"
+          >
+            Generate Random
+            <Shuffle />
+          </Button>
+          <GraphicItems color={color} />
+
           <div className="flex gap-2">
             <Button
               onClick={handleGenerateRandom}
