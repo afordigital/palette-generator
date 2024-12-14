@@ -9,6 +9,7 @@ import {
   TooltipProvider
 } from "../shared/ui/tooltip";
 import { Palette } from "@/utils/palettes";
+import { TooltipTrigger } from "@radix-ui/react-tooltip";
 
 interface CopyPaletteProps {
   colors: { color: string; text: string }[];
@@ -28,15 +29,17 @@ export function CopyPalette({ colors }: CopyPaletteProps) {
   return (
     <TooltipProvider>
       <Tooltip delayDuration={200}>
-          <Button
-            aria-label="copy button"
-            size={"sm"}
-            variant={"outline"}
-            onClick={handlerClick}
-            className="ml-2 rounded-[4px]"
-          >
-            <Copy></Copy>
-          </Button>
+          <TooltipTrigger asChild>
+            <Button
+              aria-label="copy palette"
+              size={"sm"}
+              variant={"outline"}
+              onClick={handlerClick}
+              className="ml-2 rounded-[4px]"
+            >
+              <Copy></Copy>
+            </Button>
+          </TooltipTrigger>
         <TooltipContent className="rounded-[4px]">
           <p className="text-[12px]">Copy palette</p>
         </TooltipContent>

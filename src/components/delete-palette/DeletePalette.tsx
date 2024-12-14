@@ -17,6 +17,7 @@ import {
   TooltipContent,
   TooltipProvider
 } from "../shared/ui/tooltip";
+import { TooltipTrigger } from "@radix-ui/react-tooltip";
 
 interface DeletePaletteProps {
   name: string;
@@ -66,17 +67,19 @@ export function DeletePalette({ name, action }: DeletePaletteProps) {
 
       <TooltipProvider>
         <Tooltip delayDuration={200}>
-            <Button
-              aria-label="delete button"
-              variant="outline"
-              size={"sm"}
-              onClick={() => {
-                setShowAlertDialog(true);
-              }}
-              className="ml-2 rounded-[4px] text-red-500"
-            >
-              <Trash2Icon />
-            </Button>
+            <TooltipTrigger asChild>
+              <Button
+                aria-label="delete palette"
+                variant="outline"
+                size={"sm"}
+                onClick={() => {
+                  setShowAlertDialog(true);
+                }}
+                className="ml-2 rounded-[4px] text-red-500"
+              >
+                <Trash2Icon />
+              </Button>
+            </TooltipTrigger>
           <TooltipContent className="rounded-[4px] ">
             <p className="text-[12px]">Delete palette</p>
           </TooltipContent>

@@ -22,7 +22,7 @@ describe('./src/components/delete-palette/DeletePalette.tsx', () => {
 
         render(<DeletePalette action={action} name={colorName}/>);
 
-        const deleteButton: HTMLElement =  screen.getByLabelText(/delete button/i);
+        const deleteButton: HTMLElement =  screen.getByLabelText(/delete palette/i);
 
         await userEvent.click(deleteButton);
 
@@ -34,7 +34,7 @@ describe('./src/components/delete-palette/DeletePalette.tsx', () => {
     test("should render a cancel delete button and a confirm delete button", async () => {
         render(<DeletePalette action={action} name={colorName}/>);
 
-        const deleteButton: HTMLElement =  screen.getByLabelText(/delete button/i);
+        const deleteButton: HTMLElement =  screen.getByLabelText(/delete palette/i);
 
         await userEvent.click(deleteButton);
 
@@ -48,7 +48,7 @@ describe('./src/components/delete-palette/DeletePalette.tsx', () => {
     test("should cancel the deletion of a color in the palette", async () => {
         render(<DeletePalette action={action} name={colorName}/>);
 
-        const deleteButton: HTMLElement =  screen.getByLabelText(/delete button/i);
+        const deleteButton: HTMLElement =  screen.getByLabelText(/delete palette/i);
 
         await userEvent.click(deleteButton);
 
@@ -62,9 +62,9 @@ describe('./src/components/delete-palette/DeletePalette.tsx', () => {
     test("should confirm the deletion of a color in the palette", async () => {
         render(<DeletePalette action={action} name={colorName}/>, { wrapper: Wrapper });
 
-        const deleteButton: HTMLElement =  screen.getByLabelText(/delete button/i);
+        const deletePaletteButton: HTMLElement =  screen.getByLabelText(/delete palette/i);
 
-        await userEvent.click(deleteButton);
+        await userEvent.click(deletePaletteButton);
 
         const confirmDelete: HTMLElement = screen.getByLabelText(/confirm delete/i);
 

@@ -34,7 +34,7 @@ describe('./src/components/copy-palette/CopyPalette.tsx', () => {
     test("should render a copy button", () => {
         render(<CopyPalette colors={palettesList}/>);
 
-        const copyButton: HTMLElement = screen.getByLabelText(/copy button/i);
+        const copyButton: HTMLElement = screen.getByLabelText(/copy palette/i);
 
         expect(copyButton).toBeInTheDocument();
     });
@@ -54,7 +54,7 @@ describe('./src/components/copy-palette/CopyPalette.tsx', () => {
 
         render(<CopyPalette colors={palettesList}/>, { wrapper: Wrapper });
 
-        const copyButton: HTMLElement = screen.getByLabelText(/copy button/i);
+        const copyButton: HTMLElement = screen.getByLabelText(/copy palette/i);
 
         await userEvent.click(copyButton);
 

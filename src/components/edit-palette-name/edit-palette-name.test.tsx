@@ -6,7 +6,7 @@ describe('./src/components/edit-palette-name/EditPaletteName.tsx', () => {
     test('should render a edit button', () => {
         render(<EditPaletteName />);
 
-        const editBtn: HTMLElement = screen.getByLabelText(/edit button/i);
+        const editBtn: HTMLElement = screen.getByLabelText(/edit palette/i);
 
         expect(editBtn).toBeInTheDocument();
     });

@@ -47,9 +47,9 @@ describe('./src/sections/save-palette-section/save-palette-section.test.tsx', ()
         render(<SavePaletteSection />);
 
         // the test where buttons are click on it are in su respective test file
-        const copyButton = screen.getByLabelText(/copy button/i);
-        const deleteButton = screen.getByLabelText(/delete button/i);
-        const editButton =  screen.getByLabelText(/edit button/i);
+        const copyButton = screen.getByLabelText(/copy palette/i);
+        const deleteButton = screen.getByLabelText(/delete palette/i);
+        const editButton =  screen.getByLabelText(/edit palette/i);
 
         expect(copyButton).toBeInTheDocument();
         expect(deleteButton).toBeInTheDocument();
