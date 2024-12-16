@@ -4,10 +4,10 @@ import {
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from "@components/ui/chart";
+} from "@/components/shared/ui/chart";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
-import { type ChartConfig } from "@components/ui/chart";
+import { type ChartConfig } from "@/components/shared/ui/chart";
 
 const chartData = [
   { month: "January", desktop: 186, mobile: 80 },

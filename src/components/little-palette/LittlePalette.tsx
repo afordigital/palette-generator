@@ -18,7 +18,7 @@ type PaletteProps = {
 export const LittlePalette = ({ colors }: PaletteProps) => {
   return (
     <TooltipProvider>
-      <article className="flex flex-row">
+      <article aria-label="little-palette" className="flex flex-row">
         {colors.map(({ color, text }, index) => {
           return (
             <Tooltip delayDuration={200} key={color + index}>
