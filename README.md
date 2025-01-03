@@ -44,12 +44,12 @@ Clone the repository and navigate to the project directory:
 ````bash
 git clone https://github.com/afordigital/palette-generator.git
 cd palette-generator
-
+````
 ## Install the dependencies:
 
 ```bash
 npm install
-````
+```
 
 ## Running the Application
 
@@ -81,15 +81,14 @@ We welcome contributions to enhance the Palette Generator. Follow these steps to
    git checkout -b feature-name
    ```
 
-````
 3. Commit your changes:
 ```bash
 git commit -m "Add feature-name"
-``
+```
 4. Push to the branch:
 ```bash
 git push origin feature-name
-````
+```
 
 5. Create a Pull Request
 
